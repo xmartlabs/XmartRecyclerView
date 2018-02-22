@@ -7,7 +7,32 @@ A smart, simple and fast RecyclerView library, made with ❤️ by [XMARTLABS](h
 
 ## Overview
 
-**For more information look at [our blog post] that introduces *XmartRecyclerView**
+XmartRecyclerView is a library created to make using RecyclerViews easier. But it doesn't stop there.
+This library not only makes working with them a piece of cake, it also offers top-notch 
+performance and a set of very interesting features that you will surely love.
+
+## Contents
+
+* [Loading On-Demand]
+* [XmartAdapter]
+* [Empty View Support]
+
+### Loading On-Demand
+We provide a way to set a threshold, so that when it's reached, the library automatically loads the next
+page of the RecyclerView. You only need to set that threshold, and decide what to load in the next page.
+It's as easy as that.
+
+### XmartAdapter
+We know it's a struggle having to deal with duplicate items in a RecyclerView. That's why we made our adapter really
+*xmart*. After you define when two objects are the actually same object, and when two objects have the same content, 
+our adapter will automatically handle every addition to the list: if the item would be a duplicate, it just ignores 
+its addition and keeps on working.
+
+### Empty View Support
+One of the not-so-minor problems when working with RecyclerViews is what to do when the list is simply *blank*.
+We thought of that, so we offer what we like to call **Empty View Support**. Just decide an appropiate layout
+that suits your needs, and set it as the empty view. We will handle the rest (yes, even if an item is removed and
+the list suddenly becomes empty, or if the list was empty but it now has an item, we will make that happen too).
 
 ## Getting involved
 
@@ -16,18 +41,19 @@ A smart, simple and fast RecyclerView library, made with ❤️ by [XMARTLABS](h
 * If you **found a bug** check older issues before submitting a new one.
 * If you **need help** or would like to **ask a general question**, use [StackOverflow]. (Tag `xmart-recyclerview`).
 
-**Before contributing, please check the [CONTRIBUTING](CONTRIBUTING.md) file.**
+**Before contributing, please check the [CONTRIBUTING.md](CONTRIBUTING.md) file.**
 
+[Loading On-Demand]: #loading-on-demand
+[XmartAdapter]: #xmartadapter
+[Empty View Support]: #empty-view-support
 <!--- External -->
 [StackOverflow]: http://stackoverflow.com/questions/tagged/xmart-recyclerview
-[our blog post]: http://blog.xmartlabs.com/
-[twitter]: https://twitter.com/xmartlabs
 
-# Donate to XmartRecyclerView
+## Donate to XmartRecyclerView
 
 So we can make XmartRecyclerView even better!<br><br>
 [<img src="donate.png"/>](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HRMAH7WZ4QQ8E)
 
-# Changelog
+## Changelog
 
-This can be found in the [CHANGELOG.md](CHANGELOG.md) file.
+The Changelog for this project can be found in the [CHANGELOG.md](CHANGELOG.md) file.
