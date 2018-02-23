@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xmartlabs.xmartrecyclerview"
+    >
+
+    <application>
+
+        <activity
+            android:configChanges="orientation|screenSize"
+            android:name=".multipleitems.MultipleItemActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:configChanges="orientation|screenSize"
+            android:name=".singleitem.SingleItemActivity"
+            android:screenOrientation="portrait"
+            />
+
+    </application>
+
+</manifest>
