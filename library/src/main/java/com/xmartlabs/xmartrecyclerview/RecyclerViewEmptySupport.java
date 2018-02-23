@@ -86,8 +86,8 @@ public class RecyclerViewEmptySupport extends RecyclerView {
    * @param attrs   The attributes of the XML tag that is inflating the view.
    */
   private void bindAttributes(Context context, AttributeSet attrs) {
-    TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Commons, 0, 0);
-    emptyViewId = attributes.getResourceId(R.styleable.Commons_emptyView, -1);
+    TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.RecyclerViewEmptySupport, 0, 0);
+    emptyViewId = attributes.getResourceId(R.styleable.RecyclerViewEmptySupport_emptyView, -1);
     attributes.recycle();
   }
 

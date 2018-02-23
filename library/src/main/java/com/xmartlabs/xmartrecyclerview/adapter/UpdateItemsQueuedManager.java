@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 
 import java.util.ArrayDeque;
-import java.util.function.Consumer;
 
 import lombok.RequiredArgsConstructor;
 
