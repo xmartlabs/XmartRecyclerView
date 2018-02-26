@@ -12,11 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.annimon.stream.Exceptional;
-import com.annimon.stream.IntPair;
-import com.annimon.stream.Objects;
-import com.annimon.stream.Stream;
-import com.annimon.stream.function.BiFunction;
+import com.xmartlabs.xmartrecyclerview.common.BiFunction;
+import com.xmartlabs.xmartrecyclerview.common.Function;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +51,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    */
   @MainThread
   public void removeItem(@NonNull Object item) {
-    Stream.of(new ArrayList<>(items))
-        .indexed()
-        .filter(element -> Objects.equals(item, element.getSecond().getItem()))
-        .map(IntPair::getFirst)
-        .sorted((index1, index2) -> Utils.compare(index2, index1))
-        .forEach(index -> {
-          items.remove((int) index);
-          notifyItemRemoved(index);
-        });
+    removeItemsByCondition(element -> Utils.equals(item, element.getItem()));
   }
 
   /**
@@ -73,9 +62,9 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
   @MainThread
   @SuppressWarnings("WeakerAccess")
   public void removeItems(@NonNull List<Object> items) {
-    Stream.of(items)
-        .distinct()
-        .forEach(this::removeItem);
+    for (Object item : items) {
+      removeItem(item);
+    }
   }
 
   /**
@@ -150,10 +139,10 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
       return false;
     }
     int lastItemCount = getItemCount();
-    Stream.ofNullable(items)
-        .indexed()
-        .forEach(itemWithPosition ->
-            addItemWithoutNotifying(index + itemWithPosition.getFirst(), type, itemWithPosition.getSecond(), false));
+    for (int i = 0; i < items.size(); i++) {
+      Object item = items.get(0);
+      addItemWithoutNotifying(index + i, type, item, false);
+    }
     addItemTypeIfNeeded(type);
     notifyItemRangeInserted(index, getItemCount() - lastItemCount);
     return true;
@@ -167,13 +156,16 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * @return if item was successfully added.
    */
   @MainThread
+  @SuppressWarnings("WeakerAccess")
   protected <T extends RecycleItemType> boolean addItems(@NonNull T type, @Nullable List<?> items) {
     if (Utils.isNullOrEmpty(items)) {
       return false;
     }
     int lastItemCount = getItemCount();
-    Stream.ofNullable(items)
-        .forEach(item -> addItemWithoutNotifying(type, item, false));
+    for (Object item : items) {
+      addItemWithoutNotifying(type, item, false);
+    }
+
     addItemTypeIfNeeded(type);
     if (lastItemCount == 0) {
       notifyDataSetChanged();
@@ -210,8 +202,10 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     updateItemsQueuedManager.update(updateDiffCallback, diffResult -> {
       items.clear();
-      Stream.of(newItems)
-          .forEach(item -> addItemWithoutNotifying(type, item, false));
+      for (T item : newItems) {
+        addItemWithoutNotifying(type, item, false);
+      }
+
       addItemTypeIfNeeded(type);
       diffResult.dispatchUpdatesTo(BaseRecyclerViewAdapter.this);
     });
@@ -235,9 +229,11 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
       return;
     }
 
-    List<T> newItemsContent = Stream.ofNullable(newItems)
-        .map(pair -> pair.second)
-        .toList();
+
+    final List<T> newItemsContent = new ArrayList<>();
+    for (Pair<? extends RecycleItemType, T> item : newItems) {
+      newItemsContent.add(item.second);
+    }
 
     DiffUtil.Callback updateDiffCallback = getUpdateDiffCallback(
         newItemsContent,
@@ -247,8 +243,9 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     updateItemsQueuedManager.update(updateDiffCallback, diffResult -> {
       items.clear();
-      Stream.of(newItems)
-          .forEach(pair -> addItemWithoutNotifying(pair.first, pair.second, true));
+      for (Pair<? extends RecycleItemType, T> pair : newItems) {
+        addItemWithoutNotifying(pair.first, pair.second, true);
+      }
       diffResult.dispatchUpdatesTo(this);
     });
   }
@@ -271,22 +268,28 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
       @Override
       public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        //noinspection unchecked
-        return Exceptional.of(() -> areItemsTheSameFunction.apply(
-            (T) items.get(oldItemPosition).getItem(),
-            newItems.get(newItemPosition)))
-            //.ifException(Timber::w)
-            .getOrElse(false);
+        try {
+          //noinspection unchecked
+          return areItemsTheSameFunction.apply(
+              (T) items.get(oldItemPosition).getItem(),
+              newItems.get(newItemPosition));
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          return false;
+        }
       }
 
       @Override
       public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        //noinspection unchecked
-        return Exceptional.of(() -> areContentTheSameFunction.apply(
-            (T) items.get(oldItemPosition).getItem(),
-            newItems.get(newItemPosition)))
-            //.ifException(Timber::w)
-            .getOrElse(false);
+        try {
+          //noinspection unchecked
+          return areContentTheSameFunction.apply(
+              (T) items.get(oldItemPosition).getItem(),
+              newItems.get(newItemPosition));
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          return false;
+        }
       }
     };
   }
@@ -369,12 +372,27 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
   @MainThread
   @SuppressWarnings("unused")
   public void clearItems(@NonNull RecycleItemType itemType) {
-    final List<Object> itemsToRemove = Stream.ofNullable(items)
-        .filter(value -> value.getType().equals(itemType))
-        .map(Element::getItem)
-        .toList();
+    removeItemsByCondition(element -> Utils.equals(element.getType(), itemType));
+  }
 
-    removeItems(itemsToRemove);
+  private void removeItemsByCondition(@NonNull Function<Element, Boolean> conditionToRemoveItem) {
+    if (Utils.isNullOrEmpty(items)) {
+      return;
+    }
+
+    List<Integer> indexesToRemove = new ArrayList<>();
+    for (int i = 0; i < items.size(); i++) {
+      Element element = items.get(i);
+      if (conditionToRemoveItem.apply(element)) {
+        indexesToRemove.add(i);
+      }
+    }
+
+    for (int i = indexesToRemove.size() - 1; i >= 0; i--) {
+      int index = indexesToRemove.get(i);
+      items.remove(index);
+      notifyItemRemoved(index);
+    }
   }
 
   private static class Element {

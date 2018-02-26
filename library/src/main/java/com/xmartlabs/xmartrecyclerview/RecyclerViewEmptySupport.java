@@ -8,8 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.annimon.stream.Optional;
-import com.annimon.stream.function.Function;
+import com.xmartlabs.xmartrecyclerview.common.Function;
 
 /**
  * {@link RecyclerView} subclass that automatically handles empty state.
@@ -94,11 +93,12 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   /** Initializes the empty view using the resource identifier {@link #emptyViewId}, if it exists. */
   private void initializeEmptyView() {
     if (emptyViewId > 0) {
-      post(() -> Optional.<View>ofNullable(getRootView().findViewById(emptyViewId))
-          .ifPresent(view -> {
-            emptyView = view;
-            showCorrectView();
-          }));
+      post(() -> {
+        emptyView = getRootView().findViewById(emptyViewId);
+        if (emptyView != null) {
+          showCorrectView();
+        }
+      });
     }
   }
 
@@ -113,9 +113,9 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   private void showCorrectView() {
     Adapter<?> adapter = getAdapter();
     if (emptyView != null) {
-      boolean hasItems = Optional.ofNullable(isInEmptyState)
-          .map(state -> state.apply(this))
-          .orElse(adapter == null || adapter.getItemCount() > 0);
+      boolean hasItems = isInEmptyState == null
+          ? adapter == null || adapter.getItemCount() > 0
+          : isInEmptyState.apply(this);
       emptyView.setVisibility(hasItems ? GONE : VISIBLE);
       setVisibility(hasItems ? VISIBLE : GONE);
     }
@@ -168,7 +168,10 @@ public class RecyclerViewEmptySupport extends RecyclerView {
    */
   @SuppressWarnings("unused")
   public void resetState() {
-    Optional.ofNullable(emptyView)
-        .ifPresentOrElse(view -> showCorrectView(), this::initializeEmptyView);
+    if (emptyView == null) {
+      initializeEmptyView();
+    } else {
+      showCorrectView();
+    }
   }
 }

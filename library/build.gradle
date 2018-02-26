@@ -23,18 +23,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
-        warning 'InvalidPackage'
-    }
 }
 
 dependencies {
-    implementation "com.android.support:recyclerview-v7:${libraryVersion.androidSupport}"
-    implementation "com.annimon:stream:${libraryVersion.stream}"
-
-    testImplementation "junit:junit:${libraryVersion.junit}"
+    androidTestImplementation "com.annimon:stream:${libraryVersion.stream}"
     androidTestImplementation "com.android.support.test:runner:${libraryVersion.testRunner}"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${libraryVersion.espresso}"
-}
 
+    implementation "com.android.support:recyclerview-v7:${libraryVersion.androidSupport}"
+
+    testImplementation "junit:junit:${libraryVersion.junit}"
+}

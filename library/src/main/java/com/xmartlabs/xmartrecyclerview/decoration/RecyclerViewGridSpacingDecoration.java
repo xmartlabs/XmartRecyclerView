@@ -8,9 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.annimon.stream.Optional;
-import com.annimon.stream.Stream;
-import com.annimon.stream.function.BiConsumer;
+import com.xmartlabs.xmartrecyclerview.common.BiConsumer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +70,7 @@ public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecorati
   @Nullable
   private BiConsumer<Rect, RecyclerView> setItemOffsetConsumer;
   /** The default spacing for every item (top, right, bottom, left), unless one of the above spacings apply. */
-  @Dimension(unit = Dimension.PX)
+  @Dimension
   private int itemSpacing;
 
   private final List<Integer> firstColumns = new ArrayList<>();
@@ -86,11 +84,11 @@ public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecorati
       throw new IllegalArgumentException("This Item Decoration can only be used with GridLayoutManager");
     }
     GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
-    Optional.ofNullable(setItemOffsetConsumer)
-        .ifPresentOrElse(
-            consumer -> consumer.accept(outRect, parent),
-            () -> setOffsetForItem(outRect, view, parent, layoutManager)
-        );
+    if (setItemOffsetConsumer == null){
+      setOffsetForItem(outRect, view, parent, layoutManager);
+    } else {
+      setItemOffsetConsumer.accept(outRect, parent);
+    }
   }
 
   /**
@@ -107,19 +105,19 @@ public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecorati
     int numberOfItems = recyclerView.getAdapter().getItemCount();
     GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
 
-    Optional.ofNullable(setItemOffsetConsumer)
-        .executeIfPresent(consumer -> consumer.accept(outRect, recyclerView))
-        .executeIfAbsent(() -> {
-          int firstRowTopSpacing = Optional.ofNullable(this.firstRowTopSpacing).orElse(itemSpacing);
-          int firstColumnLeftSpacing = Optional.ofNullable(this.firstColumnLeftSpacing).orElse(itemSpacing);
-          int lastColumnRightSpacing = Optional.ofNullable(this.lastColumnRightSpacing).orElse(itemSpacing);
-          int lastRowBottomSpacing = Optional.ofNullable(this.lastRowBottomSpacing).orElse(itemSpacing);
+    if (setItemOffsetConsumer == null) {
+      int firstRowTopSpacing = this.firstRowTopSpacing == null ? itemSpacing : this.firstRowTopSpacing;
+      int firstColumnLeftSpacing = this.firstColumnLeftSpacing == null ? itemSpacing : this.firstColumnLeftSpacing;
+      int lastColumnRightSpacing = this.lastColumnRightSpacing == null ? itemSpacing : this.lastColumnRightSpacing;
+      int lastRowBottomSpacing = this.lastRowBottomSpacing == null ? itemSpacing : this.lastRowBottomSpacing;
 
-          outRect.top = isFirstRow(position, spanCount, spanSizeLookup) ? firstRowTopSpacing : itemSpacing;
-          outRect.left = isFirstColumn(position, spanCount, spanSizeLookup) ? firstColumnLeftSpacing : itemSpacing;
-          outRect.right = isLastColumn(position, spanCount, numberOfItems, spanSizeLookup) ? lastColumnRightSpacing : itemSpacing;
-          outRect.bottom = isLastRow(position, spanCount, numberOfItems, spanSizeLookup) ? lastRowBottomSpacing : itemSpacing;
-        });
+      outRect.top = isFirstRow(position, spanCount, spanSizeLookup) ? firstRowTopSpacing : itemSpacing;
+      outRect.left = isFirstColumn(position, spanCount, spanSizeLookup) ? firstColumnLeftSpacing : itemSpacing;
+      outRect.right = isLastColumn(position, spanCount, numberOfItems, spanSizeLookup) ? lastColumnRightSpacing : itemSpacing;
+      outRect.bottom = isLastRow(position, spanCount, numberOfItems, spanSizeLookup) ? lastRowBottomSpacing : itemSpacing;
+    } else {
+      setItemOffsetConsumer.accept(outRect, recyclerView);
+    }
   }
 
   /**
@@ -233,13 +231,23 @@ public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecorati
    * @param position the position from which the cache should be invalidated
    */
   public void invalidateCacheFromPosition(int position) {
-    firstColumns.removeAll( Stream.of(firstColumns)
-        .filter(item -> item <= position)
-        .toList());
+    List<Integer> itemsToRemove= new ArrayList<>();
+    for (Integer item : firstColumns) {
+      if (item <= position) {
+        itemsToRemove.add(item);
+      }
+    }
+    firstColumns.removeAll( itemsToRemove);
+
     biggestFirstColumn = firstColumns.get(firstColumns.size() - 1);
-    lastColumns.removeAll(Stream.of(lastColumns)
-        .filter(item -> item <= position)
-        .toList());
+
+    itemsToRemove.clear();
+    for (Integer item : lastColumns) {
+      if (item <= position) {
+        itemsToRemove.add(item);
+      }
+    }
+    lastColumns.removeAll(itemsToRemove);
     biggestLastColumn = lastColumns.get(lastColumns.size() -1);
   }
 
