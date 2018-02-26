@@ -1,15 +1,15 @@
 # XmartRecyclerView
 <p align="center">
-<a href="https://raw.githubusercontent.com/xmartlabs/Eureka/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" /></a>
+<a href="https://raw.githubusercontent.com/xmartlabs/XmartRecyclerView/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" /></a>
 </p>
 
 A smart, simple and fast RecyclerView library, made with ❤️ by [XMARTLABS](http://xmartlabs.com)
 
 ## Overview
 
-XmartRecyclerView is a library created to make using RecyclerViews easier. But it doesn't stop there.
-This library not only makes working with them a piece of cake, it also offers top-notch 
-performance and a set of very interesting features that you will surely love.
+XmartRecyclerView is a library created to make your life easier when using a RecyclerView. 
+But it doesn't stop there. This library not only makes working with it a piece of cake, 
+it also offers top-notch performance and a set of very interesting features that you will surely love.
 
 ## Contents
 
@@ -18,7 +18,7 @@ performance and a set of very interesting features that you will surely love.
 * [Empty View Support]
 
 ### Loading On-Demand
-We provide a way to set a threshold, so that when it's reached, the library automatically loads the next
+XmartRecyclerView provide a way to set a threshold, so that when it's reached, the library automatically loads the next
 page of the RecyclerView. You only need to set that threshold, and decide what to load in the next page.
 It's as easy as that.
 
@@ -31,8 +31,8 @@ its addition and keeps on working.
 ### Empty View Support
 One of the not-so-minor problems when working with RecyclerViews is what to do when the list is simply *blank*.
 We thought of that, so we offer what we like to call **Empty View Support**. Just decide an appropiate layout
-that suits your needs, and set it as the empty view. We will handle the rest (yes, even if an item is removed and
-the list suddenly becomes empty, or if the list was empty but it now has an item, we will make that happen too).
+that suits your needs, and set it as the empty view. XmartRecyclerView will handle the rest (yes, even if an item 
+is removed and the list suddenly becomes empty, or if the list was empty but it now has an item, we will make that happen too).
 
 ## Getting involved
 
@@ -41,7 +41,7 @@ the list suddenly becomes empty, or if the list was empty but it now has an item
 * If you **found a bug** check older issues before submitting a new one.
 * If you **need help** or would like to **ask a general question**, use [StackOverflow]. (Tag `xmart-recyclerview`).
 
-**Before contributing, please check the [CONTRIBUTING.md](CONTRIBUTING.md) file.**
+**Before contributing, please check the [CONTRIBUTING](CONTRIBUTING.md) file.**
 
 [Loading On-Demand]: #loading-on-demand
 [XmartAdapter]: #xmartadapter
@@ -56,4 +56,4 @@ So we can make XmartRecyclerView even better!<br><br>
 
 ## Changelog
 
-The Changelog for this project can be found in the [CHANGELOG.md](CHANGELOG.md) file.
+The changelog for this project can be found in the [CHANGELOG](CHANGELOG.md) file.
