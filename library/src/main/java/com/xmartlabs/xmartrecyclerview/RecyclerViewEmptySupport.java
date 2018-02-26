@@ -141,6 +141,7 @@ public class RecyclerViewEmptySupport extends RecyclerView {
    *
    * @param emptyView the empty view to show on empty state
    */
+  @SuppressWarnings("unused")
   public void setEmptyView(@Nullable View emptyView) {
     this.emptyView = emptyView;
   }
@@ -152,6 +153,7 @@ public class RecyclerViewEmptySupport extends RecyclerView {
    *
    * @param isInEmptyState the callback function to determine if the recycler view is in an empty state
    */
+  @SuppressWarnings("unused")
   public void setIsInEmptyState(@Nullable Function<RecyclerView, Boolean> isInEmptyState) {
     this.isInEmptyState = isInEmptyState;
     showCorrectView();
@@ -164,6 +166,7 @@ public class RecyclerViewEmptySupport extends RecyclerView {
    * If it's already present, then the recycler view will check whether or not is in an empty state and act
    * accordingly (show/hide the empty view/itself).
    */
+  @SuppressWarnings("unused")
   public void resetState() {
     Optional.ofNullable(emptyView)
         .ifPresentOrElse(view -> showCorrectView(), this::initializeEmptyView);

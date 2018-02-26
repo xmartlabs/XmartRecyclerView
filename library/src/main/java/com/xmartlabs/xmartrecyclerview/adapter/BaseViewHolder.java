@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
+  @SuppressWarnings("WeakerAccess")
   public BaseViewHolder(@NonNull View view) {
     super(view);
   }
@@ -25,6 +26,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
    * @return The view's Context.
    */
   @NonNull
+  @SuppressWarnings("WeakerAccess")
   protected final Context getContext() {
     return itemView.getContext();
   }

@@ -30,19 +30,11 @@ android {
 }
 
 dependencies {
-    annotationProcessor "org.projectlombok:lombok:${libraryVersion.lombok}"
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation "com.android.support:recyclerview-v7:${libraryVersion.androidSupport}"
     implementation "com.annimon:stream:${libraryVersion.stream}"
 
-    compileOnly "org.projectlombok:lombok:${libraryVersion.lombok}"
-
     testImplementation "junit:junit:${libraryVersion.junit}"
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    //androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-
+    androidTestImplementation "com.android.support.test:runner:${libraryVersion.testRunner}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${libraryVersion.espresso}"
 }
 

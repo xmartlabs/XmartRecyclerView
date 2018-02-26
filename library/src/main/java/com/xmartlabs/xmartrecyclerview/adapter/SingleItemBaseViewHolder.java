@@ -21,6 +21,7 @@ public class SingleItemBaseViewHolder<T> extends BaseViewHolder implements Bindi
     this(view, null);
   }
 
+  @SuppressWarnings("WeakerAccess")
   public SingleItemBaseViewHolder(@NonNull View view, @Nullable Consumer<T> onClickListenerConsumer) {
     super(view);
     this.onClickListener = Optional.ofNullable(onClickListenerConsumer);

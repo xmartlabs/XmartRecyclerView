@@ -15,8 +15,6 @@ import com.annimon.stream.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Builder;
-
 /**
  * {@link RecyclerView.ItemDecoration} subclass designed to add spacing to item controlled by a {@link GridLayoutManager}.
  *
@@ -46,7 +44,7 @@ import lombok.Builder;
  *
  * For even faster performance, consider enabling {@link GridLayoutManager.SpanSizeLookup#setSpanIndexCacheEnabled(boolean)}.
  */
-@Builder
+@SuppressWarnings("unused")
 public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecoration {
   private static final int FIRST_ROW_GROUP = 0;
 
@@ -243,5 +241,73 @@ public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecorati
         .filter(item -> item <= position)
         .toList());
     biggestLastColumn = lastColumns.get(lastColumns.size() -1);
+  }
+
+  public static final class Builder {
+    private Integer firstRowTopSpacing;
+    private Integer lastRowBottomSpacing;
+    private Integer firstColumnLeftSpacing;
+    private Integer lastColumnRightSpacing;
+    private BiConsumer<Rect, RecyclerView> setItemOffsetConsumer;
+    private int itemSpacing;
+    private int biggestFirstColumn;
+    private int biggestLastColumn;
+
+    public Builder() {}
+
+    public Builder firstRowTopSpacing(Integer val) {
+      firstRowTopSpacing = val;
+      return this;
+    }
+
+    public Builder lastRowBottomSpacing(Integer val) {
+      lastRowBottomSpacing = val;
+      return this;
+    }
+
+    public Builder firstColumnLeftSpacing(Integer val) {
+      firstColumnLeftSpacing = val;
+      return this;
+    }
+
+    public Builder lastColumnRightSpacing(Integer val) {
+      lastColumnRightSpacing = val;
+      return this;
+    }
+
+    public Builder setItemOffsetConsumer(BiConsumer<Rect, RecyclerView> val) {
+      setItemOffsetConsumer = val;
+      return this;
+    }
+
+    public Builder itemSpacing(int val) {
+      itemSpacing = val;
+      return this;
+    }
+
+    public Builder biggestFirstColumn(int val) {
+      biggestFirstColumn = val;
+      return this;
+    }
+
+    public Builder biggestLastColumn(int val) {
+      biggestLastColumn = val;
+      return this;
+    }
+
+    public RecyclerViewGridSpacingDecoration build() {
+      return new RecyclerViewGridSpacingDecoration(this);
+    }
+  }
+
+  private RecyclerViewGridSpacingDecoration(Builder builder) {
+    firstRowTopSpacing = builder.firstRowTopSpacing;
+    lastRowBottomSpacing = builder.lastRowBottomSpacing;
+    firstColumnLeftSpacing = builder.firstColumnLeftSpacing;
+    lastColumnRightSpacing = builder.lastColumnRightSpacing;
+    setItemOffsetConsumer = builder.setItemOffsetConsumer;
+    itemSpacing = builder.itemSpacing;
+    biggestFirstColumn = builder.biggestFirstColumn;
+    biggestLastColumn = builder.biggestLastColumn;
   }
 }

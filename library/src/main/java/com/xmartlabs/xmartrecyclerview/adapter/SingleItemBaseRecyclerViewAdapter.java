@@ -56,6 +56,7 @@ public abstract class SingleItemBaseRecyclerViewAdapter<T, VH extends RecyclerVi
    *
    * @param item The item to be added.
    */
+  @SuppressWarnings("unused")
   public void addItem(@NonNull Object item) {
     addItem(this, item);
   }
@@ -68,6 +69,7 @@ public abstract class SingleItemBaseRecyclerViewAdapter<T, VH extends RecyclerVi
    * @param items The items that will be the data for the recycler view.
    * @return if items was successfully added.
    */
+  @SuppressWarnings("unused")
   public boolean addItems(int index, @Nullable List<?> items) {
     return addItems(index, this, items);
   }
@@ -81,6 +83,7 @@ public abstract class SingleItemBaseRecyclerViewAdapter<T, VH extends RecyclerVi
    * @param areItemsTheSameFunction   A function which checks that two items are the same.
    * @param areContentTheSameFunction A function which checks that the content of two items are the same.
    */
+  @SuppressWarnings("unused")
   protected void setItems(final @Nullable List<T> newItems,
                           @NonNull BiFunction<T, T, Boolean> areItemsTheSameFunction,
                           @NonNull BiFunction<T, T, Boolean> areContentTheSameFunction) {

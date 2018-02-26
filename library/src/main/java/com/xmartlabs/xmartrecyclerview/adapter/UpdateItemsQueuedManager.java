@@ -8,16 +8,13 @@ import android.support.v7.util.DiffUtil;
 
 import java.util.ArrayDeque;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 final class UpdateItemsQueuedManager {
   private final ArrayDeque<QueueItem> mPendingUpdates = new ArrayDeque<>();
   private final Handler mHandler = new Handler(Looper.getMainLooper());
 
   @MainThread
-  public void update(@NonNull DiffUtil.Callback diffCallback,
-                     @NonNull Consumer<DiffUtil.DiffResult> diffResultConsumer) {
+  void update(@NonNull DiffUtil.Callback diffCallback,
+              @NonNull Consumer<DiffUtil.DiffResult> diffResultConsumer) {
     QueueItem queueItem = new QueueItem(diffCallback, diffResultConsumer);
     mPendingUpdates.add(queueItem);
     if (mPendingUpdates.size() == 1) {
@@ -48,11 +45,16 @@ final class UpdateItemsQueuedManager {
     }
   }
 
-  @RequiredArgsConstructor
   private static class QueueItem {
     @NonNull
     private final DiffUtil.Callback diffCallback;
     @NonNull
     private final Consumer<DiffUtil.DiffResult> diffResultConsumer;
+
+    QueueItem(@NonNull DiffUtil.Callback diffCallback,
+              @NonNull Consumer<DiffUtil.DiffResult> diffResultConsumer) {
+      this.diffCallback = diffCallback;
+      this.diffResultConsumer = diffResultConsumer;
+    }
   }
 }
