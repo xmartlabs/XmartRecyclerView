@@ -18,7 +18,7 @@ it also offers top-notch performance and a set of very interesting features that
 * [Empty View Support]
 
 ### Loading On-Demand
-XmartRecyclerView provide a way to set a threshold, so that when it's reached, the library automatically loads the next
+XmartRecyclerView provides a way to set a threshold, so that when it's reached, it automatically loads the next
 page of the RecyclerView. You only need to set that threshold, and decide what to load in the next page.
 It's as easy as that.
 
@@ -26,7 +26,7 @@ It's as easy as that.
 We know it's a struggle having to deal with duplicate items in a RecyclerView. That's why we made our adapter really
 *xmart*. After you define when two objects are the actually same object, and when two objects have the same content, 
 our adapter will automatically handle every addition to the list: if the item would be a duplicate, it just ignores 
-its addition and keeps on working.
+its addition and keeps on working. The library makes use of Google's [DiffUtil](https://developer.android.com/reference/android/support/v7/util/DiffUtil.html) to be able to do this.
 
 ### Empty View Support
 One of the not-so-minor problems when working with RecyclerViews is what to do when the list is simply *blank*.
