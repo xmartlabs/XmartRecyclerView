@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.common;
+package com.xmartlabs.xmartrecyclerview.adapter;
 
 import android.support.annotation.NonNull;
 
@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  *
  * @param <T> the value type
  */
-public interface Consumer<T> {
+interface Consumer<T> {
   /**
    * Consume the given value.
    *

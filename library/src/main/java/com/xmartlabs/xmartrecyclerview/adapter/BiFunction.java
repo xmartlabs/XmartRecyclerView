@@ -1,4 +1,6 @@
-package com.xmartlabs.xmartrecyclerview.common;
+package com.xmartlabs.xmartrecyclerview.adapter;
+
+import android.support.annotation.NonNull;
 
 import java.util.function.Function;
 
@@ -14,7 +16,7 @@ import java.util.function.Function;
  * @param <R> the type of the result of the function
  *
  */
-public interface BiFunction<T, U, R> {
+interface BiFunction<T, U, R> {
 
   /**
    * Applies this function to the given arguments.
@@ -23,5 +25,6 @@ public interface BiFunction<T, U, R> {
    * @param u the second function argument
    * @return the function result
    */
-  R apply(T t, U u);
+  @NonNull
+  R apply(@NonNull T t, @NonNull U u);
 }

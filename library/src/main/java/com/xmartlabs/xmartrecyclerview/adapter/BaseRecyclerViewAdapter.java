@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xmartlabs.xmartrecyclerview.common.BiFunction;
 import com.xmartlabs.xmartrecyclerview.common.Function;
 
 import java.util.ArrayList;

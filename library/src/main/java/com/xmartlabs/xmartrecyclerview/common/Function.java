@@ -1,5 +1,7 @@
 package com.xmartlabs.xmartrecyclerview.common;
 
+import android.support.annotation.NonNull;
+
 /**
  * Represents a function that accepts one argument and produces a result.
  *
@@ -19,5 +21,6 @@ public interface Function<T, R> {
    * @param t the function argument
    * @return the function result
    */
-  R apply(T t);
+  @NonNull
+  R apply(@NonNull T t);
 }

@@ -1,4 +1,6 @@
-package com.xmartlabs.xmartrecyclerview.common;
+package com.xmartlabs.xmartrecyclerview.decoration;
+
+import android.support.annotation.NonNull;
 
 import java.util.function.Consumer;
 
@@ -15,7 +17,7 @@ import java.util.function.Consumer;
  * @param <U> the type of the second argument to the operation
  *
  */
-public interface BiConsumer<T, U> {
+interface BiConsumer<T, U> {
 
   /**
    * Performs this operation on the given arguments.
@@ -23,5 +25,5 @@ public interface BiConsumer<T, U> {
    * @param t the first input argument
    * @param u the second input argument
    */
-  void accept(T t, U u);
+  void accept(@NonNull T t, @NonNull U u);
 }

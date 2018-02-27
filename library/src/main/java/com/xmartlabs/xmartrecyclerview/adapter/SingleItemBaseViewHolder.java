@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.xmartlabs.xmartrecyclerview.common.Consumer;
-
 /**
  * View holder for a single item {@link T}.
  *
