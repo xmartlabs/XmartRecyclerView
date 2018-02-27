@@ -332,7 +332,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
   @CallSuper
   @Override
-  public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+  public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
     Element element = items.get(position);
     Object item = element.getItem();
     //noinspection unchecked

@@ -3,6 +3,7 @@ package com.xmartlabs.xmartrecyclerview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -31,6 +32,7 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   @Nullable
   private Function<RecyclerView, Boolean> isInEmptyState;
 
+  @NonNull
   private final RecyclerView.AdapterDataObserver emptyObserver = new AdapterDataObserver() {
     @Override
     public void onChanged() {
@@ -63,15 +65,15 @@ public class RecyclerViewEmptySupport extends RecyclerView {
     }
   };
 
-  public RecyclerViewEmptySupport(Context context) {
+  public RecyclerViewEmptySupport(@NonNull Context context) {
     this(context, null);
   }
 
-  public RecyclerViewEmptySupport(Context context, AttributeSet attrs) {
+  public RecyclerViewEmptySupport(@NonNull Context context, @Nullable AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public RecyclerViewEmptySupport(Context context, AttributeSet attrs, int defStyle) {
+  public RecyclerViewEmptySupport(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
     bindAttributes(context, attrs);
     initializeEmptyView();
@@ -84,7 +86,7 @@ public class RecyclerViewEmptySupport extends RecyclerView {
    *                access the current theme, resources, etc.
    * @param attrs   The attributes of the XML tag that is inflating the view.
    */
-  private void bindAttributes(Context context, AttributeSet attrs) {
+  private void bindAttributes(@NonNull Context context, @Nullable AttributeSet attrs) {
     TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.RecyclerViewEmptySupport, 0, 0);
     emptyViewId = attributes.getResourceId(R.styleable.RecyclerViewEmptySupport_emptyView, -1);
     attributes.recycle();
@@ -122,7 +124,7 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   }
 
   @Override
-  public void setAdapter(Adapter adapter) {
+  public void setAdapter(@Nullable Adapter adapter) {
     super.setAdapter(adapter);
     if (adapter != null) {
       try {
