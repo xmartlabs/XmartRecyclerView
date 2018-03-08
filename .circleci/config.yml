@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
       - run:
           name: Accept licenses
           command: yes | sdkmanager --licenses || true
@@ -20,12 +20,12 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
       - run:
           name: Build Project
           command: ./gradlew build
       - store_artifacts:
-          path: app/build/reports
+          path: library/build/reports
           destination: reports
   test_api_v16:
       working_directory: ~/XmartRecyclerView
@@ -57,10 +57,10 @@ jobs:
             name: Run Tests
             command: ./gradlew :library:connectedAndroidTest
         - store_artifacts:
-            path: app/build/reports
+            path: library/build/reports
             destination: reports
         - store_test_results:
-            path: app/build/test-results
+            path: library/build/test-results
 workflows:
   version: 2
   build_and_test:
