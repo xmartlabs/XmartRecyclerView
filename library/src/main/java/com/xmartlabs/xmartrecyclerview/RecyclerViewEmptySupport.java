@@ -17,7 +17,7 @@ import com.xmartlabs.xmartrecyclerview.common.Function;
  * A {@link RecyclerView} is in an empty state when its adapter holds zero items,
  * or if the callback function {@link #isInEmptyState} is set and returns true.
  *
- * In the empty state, the {@link } will be hidden and a view will be shown.
+ * In the empty state, the {@link RecyclerView} will be hidden and a view will be shown.
  * The empty state view to be shown can be defined in two ways:
  * <ol>
  * <li>By means of {@link #setEmptyView(View)} method</li>

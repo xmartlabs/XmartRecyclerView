@@ -9,11 +9,11 @@ import android.view.ViewGroup;
  * {@link VH}.
  *
  * @param <I>  Item type.
- * @param <VH> View holder type.
+ * @param <VH> ViewHolder type.
  */
 public interface RecycleItemType<I, VH extends RecyclerView.ViewHolder> {
   /**
-   * Called to crate a new view holder of the type {@link VH}.
+   * Called to create a new view holder of the type {@link VH}.
    *
    * @param parent the parent view of the view holder.
    * @return A {@link android.support.v7.widget.RecyclerView.ViewHolder} of the type {@link VH}.
