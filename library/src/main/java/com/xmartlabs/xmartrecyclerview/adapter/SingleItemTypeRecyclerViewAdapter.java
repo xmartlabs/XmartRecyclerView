@@ -12,7 +12,7 @@ import java.util.List;
  * A Base RecyclerViewAdapter with already implemented functions such as
  * setting, removing, adding items, getting its count among others.
  */
-public abstract class SingleItemBaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder>
+public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder>
     extends BaseRecyclerViewAdapter implements RecycleItemType<T, VH> {
   /**
    * Sets the items data for the recycler view and notifies any registered observers that the data set has

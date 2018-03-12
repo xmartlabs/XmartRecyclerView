@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class SimpleItemTestSetItems extends SimpleItemRecyclerViewTest {
+public class SingleItemTestSetItems extends SingleItemRecyclerViewTest {
   @Test
   public void testSetItems() {
     List<Car> cars = getCarList();

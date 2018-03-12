@@ -5,19 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.xmartlabs.xmartrecyclerview.adapter.SingleItemBaseRecyclerViewAdapter;
-import com.xmartlabs.xmartrecyclerview.adapter.SingleItemBaseViewHolder;
+import com.xmartlabs.xmartrecyclerview.adapter.SingleItemTypeRecyclerViewAdapter;
+import com.xmartlabs.xmartrecyclerview.adapter.SingleItemViewHolder;
 import com.xmartlabs.xmartrecyclerview.common.Car;
 import com.xmartlabs.xmartrecyclerview.test.R;
 
-public class CarAdapter extends SingleItemBaseRecyclerViewAdapter<Car, CarAdapter.CarViewHolder> {
+public class CarAdapter extends SingleItemTypeRecyclerViewAdapter<Car, CarAdapter.CarViewHolder> {
   @NonNull
   @Override
   public CarViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
     return new CarViewHolder(inflateView(parent, R.layout.item_single));
   }
 
-  static final class CarViewHolder extends SingleItemBaseViewHolder<Car> {
+  static final class CarViewHolder extends SingleItemViewHolder<Car> {
     private final TextView title;
 
     public CarViewHolder(@NonNull View view) {

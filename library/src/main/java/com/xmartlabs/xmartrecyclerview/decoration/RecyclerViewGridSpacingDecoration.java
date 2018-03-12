@@ -216,6 +216,7 @@ public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecorati
    * adapter did not suffer any change, then you must invalidate the {@link GridLayoutManager.SpanSizeLookup} cache
    * calling {@link GridLayoutManager.SpanSizeLookup#invalidateSpanIndexCache()}.
    */
+  @SuppressWarnings("WeakerAccess")
   public void invalidateCache() {
     firstColumns.clear();
     biggestFirstColumn = 0;
@@ -233,6 +234,7 @@ public class RecyclerViewGridSpacingDecoration extends RecyclerView.ItemDecorati
    *
    * @param position the position from which the cache should be invalidated
    */
+  @SuppressWarnings("WeakerAccess")
   public void invalidateCacheFromPosition(int position) {
     List<Integer> itemsToRemove = new ArrayList<>();
     for (Integer item : firstColumns) {

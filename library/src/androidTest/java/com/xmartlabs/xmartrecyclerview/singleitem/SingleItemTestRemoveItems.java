@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class SimpleItemTestRemoveItems extends SimpleItemRecyclerViewTest {
+public class SingleItemTestRemoveItems extends SingleItemRecyclerViewTest {
   @Test
   public void testRemoveFirstItem() {
     List<Car> cars = getCarList();

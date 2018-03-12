@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 import com.xmartlabs.xmartrecyclerview.adapter.BaseRecyclerViewAdapter;
-import com.xmartlabs.xmartrecyclerview.adapter.SimpleItemRecycleItemType;
-import com.xmartlabs.xmartrecyclerview.adapter.SingleItemBaseViewHolder;
+import com.xmartlabs.xmartrecyclerview.adapter.SingleItemRecycleItemType;
+import com.xmartlabs.xmartrecyclerview.adapter.SingleItemViewHolder;
 import com.xmartlabs.xmartrecyclerview.common.Brand;
 import com.xmartlabs.xmartrecyclerview.common.Car;
 import com.xmartlabs.xmartrecyclerview.test.R;
@@ -17,8 +17,8 @@ import com.xmartlabs.xmartrecyclerview.test.R;
 import java.util.List;
 
 public class BrandCarAdapter extends BaseRecyclerViewAdapter {
-  private final SimpleItemRecycleItemType<Car, CarViewHolder> carItemType =
-      new SimpleItemRecycleItemType<Car, CarViewHolder>() {
+  private final SingleItemRecycleItemType<Car, CarViewHolder> carItemType =
+      new SingleItemRecycleItemType<Car, CarViewHolder>() {
         @NonNull
         @Override
         public CarViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
@@ -26,8 +26,8 @@ public class BrandCarAdapter extends BaseRecyclerViewAdapter {
         }
       };
 
-  private final SimpleItemRecycleItemType<Brand, BrandViewHolder> brandItemType =
-      new SimpleItemRecycleItemType<Brand, BrandViewHolder>() {
+  private final SingleItemRecycleItemType<Brand, BrandViewHolder> brandItemType =
+      new SingleItemRecycleItemType<Brand, BrandViewHolder>() {
         @NonNull
         @Override
         public BrandViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
@@ -46,7 +46,7 @@ public class BrandCarAdapter extends BaseRecyclerViewAdapter {
     notifyDataSetChanged();
   }
 
-  static final class BrandViewHolder extends SingleItemBaseViewHolder<Brand> {
+  static final class BrandViewHolder extends SingleItemViewHolder<Brand> {
     private final TextView title;
 
     BrandViewHolder(@NonNull View view) {
@@ -62,7 +62,7 @@ public class BrandCarAdapter extends BaseRecyclerViewAdapter {
     }
   }
 
-  static final class CarViewHolder extends SingleItemBaseViewHolder<Car> {
+  static final class CarViewHolder extends SingleItemViewHolder<Car> {
     private final TextView title;
 
     CarViewHolder(@NonNull View view) {

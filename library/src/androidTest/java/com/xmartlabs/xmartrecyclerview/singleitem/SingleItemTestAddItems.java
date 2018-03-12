@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class SimpleItemTestAddItems extends SimpleItemRecyclerViewTest {
+public class SingleItemTestAddItems extends SingleItemRecyclerViewTest {
   private void testAddItem(List<Car> initialItems, List<Car> itemsToAdd) {
     SingleItemActivity activity = activityRule.getActivity();
     CarAdapter activityCarAdapter = activity.getAdapter();

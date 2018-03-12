@@ -10,16 +10,16 @@ import android.view.View;
  *
  * @param <T> The type of the single item.
  */
-public class SingleItemBaseViewHolder<T> extends BaseViewHolder implements BindingItemViewHolder<T> {
+public class SingleItemViewHolder<T> extends BaseViewHolder implements BindingItemViewHolder<T> {
   @Nullable
   private final Consumer<T> onClickListener;
 
-  public SingleItemBaseViewHolder(@NonNull View view) {
+  public SingleItemViewHolder(@NonNull View view) {
     this(view, null);
   }
 
   @SuppressWarnings("WeakerAccess")
-  public SingleItemBaseViewHolder(@NonNull View view, @Nullable Consumer<T> onClickListenerConsumer) {
+  public SingleItemViewHolder(@NonNull View view, @Nullable Consumer<T> onClickListenerConsumer) {
     super(view);
     this.onClickListener = onClickListenerConsumer;
   }
