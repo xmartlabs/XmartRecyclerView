@@ -4,7 +4,7 @@ jobs:
     working_directory: ~/XmartRecyclerView
     docker:
       # Android the primary container
-      - image: circleci/android:api-26-alpha@sha256:f6f9aff7963a62461eabb6c91b5b4a220f1806a666254ec02c3c77d442ef118f
+      - image: circleci/android:api-26-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -30,7 +30,7 @@ jobs:
   test_api_v16:
       working_directory: ~/XmartRecyclerView
       docker:
-          - image: circleci/android:api-26-alpha@sha256:f6f9aff7963a62461eabb6c91b5b4a220f1806a666254ec02c3c77d442ef118f
+          - image: circleci/android:api-26-alpha
       environment:
         JVM_OPTS: -Xmx3200m
       steps:
@@ -41,6 +41,9 @@ jobs:
         - run:
             name: Setup emulator
             command: sdkmanager "system-images;android-16;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-16;default;armeabi-v7a"
+        - run:
+            name: Change circle-android script file permissions
+            command: sudo chmod +rx /bin/circle-android
         - run:
             name: Launch emulator
             command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel on
