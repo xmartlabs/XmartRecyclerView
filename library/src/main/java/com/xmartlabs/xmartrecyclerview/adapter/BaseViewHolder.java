@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 /**
  * A Base RecyclerView.ViewHolder with already implemented functions such as
- * get ViewHolder context.
+ * getting the ViewHolder context.
  */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
   @SuppressWarnings("WeakerAccess")
@@ -25,8 +25,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
   /**
    * Returns the context the view is running in, through which it can
    * access the current theme, resources, etc.
-   *
-   * @return The view's Context.
    */
   @NonNull
   @SuppressWarnings("WeakerAccess")

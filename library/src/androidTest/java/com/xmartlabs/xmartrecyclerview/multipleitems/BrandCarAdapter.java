@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 import com.xmartlabs.xmartrecyclerview.adapter.BaseRecyclerViewAdapter;
-import com.xmartlabs.xmartrecyclerview.adapter.SingleItemRecycleItemType;
+import com.xmartlabs.xmartrecyclerview.adapter.SingleItemRecycleViewItemType;
 import com.xmartlabs.xmartrecyclerview.adapter.SingleItemViewHolder;
 import com.xmartlabs.xmartrecyclerview.common.Brand;
 import com.xmartlabs.xmartrecyclerview.common.Car;
@@ -17,8 +17,8 @@ import com.xmartlabs.xmartrecyclerview.test.R;
 import java.util.List;
 
 public class BrandCarAdapter extends BaseRecyclerViewAdapter {
-  private final SingleItemRecycleItemType<Car, CarViewHolder> carItemType =
-      new SingleItemRecycleItemType<Car, CarViewHolder>() {
+  private final SingleItemRecycleViewItemType<Car, CarViewHolder> carItemType =
+      new SingleItemRecycleViewItemType<Car, CarViewHolder>() {
         @NonNull
         @Override
         public CarViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
@@ -26,8 +26,8 @@ public class BrandCarAdapter extends BaseRecyclerViewAdapter {
         }
       };
 
-  private final SingleItemRecycleItemType<Brand, BrandViewHolder> brandItemType =
-      new SingleItemRecycleItemType<Brand, BrandViewHolder>() {
+  private final SingleItemRecycleViewItemType<Brand, BrandViewHolder> brandItemType =
+      new SingleItemRecycleViewItemType<Brand, BrandViewHolder>() {
         @NonNull
         @Override
         public BrandViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
