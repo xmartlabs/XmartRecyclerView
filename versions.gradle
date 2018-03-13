@@ -1,0 +1,15 @@
+ext {
+    buildToolsVersion = '27.0.3'
+    compileSdkVersion = 27
+    versionCode = 1
+    versionName = '0.0.1'
+    targetSdkVersion = 27
+
+    libraryVersion = [
+        androidSupport: '27.1.0',
+        espresso: '3.0.1',
+        junit: '4.12',
+        stream: '1.1.6',
+        testRunner: '1.0.1',
+    ]
+}
