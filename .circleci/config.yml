@@ -4,7 +4,7 @@ jobs:
     working_directory: ~/XmartRecyclerView
     docker:
       # Android the primary container
-      - image: circleci/android:api-26-alpha
+      - image: circleci/android:api-26-alpha@sha256:f6f9aff7963a62461eabb6c91b5b4a220f1806a666254ec02c3c77d442ef118f
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -30,7 +30,7 @@ jobs:
   test_api_v16:
       working_directory: ~/XmartRecyclerView
       docker:
-          - image: circleci/android:api-26-alpha
+          - image: circleci/android:api-26-alpha@sha256:f6f9aff7963a62461eabb6c91b5b4a220f1806a666254ec02c3c77d442ef118f
       environment:
         JVM_OPTS: -Xmx3200m
       steps:
