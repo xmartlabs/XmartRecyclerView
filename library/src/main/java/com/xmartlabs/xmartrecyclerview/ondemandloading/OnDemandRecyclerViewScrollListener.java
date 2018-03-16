@@ -1,17 +1,15 @@
-package com.xmartlabs.xmartrecyclerview.listener;
+package com.xmartlabs.xmartrecyclerview.ondemandloading;
 
 import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 
-import com.xmartlabs.xmartrecyclerview.common.MetricsHelper;
-
-/**
- * An OnDemandLoadingScrollListener for recycler view pagination in {@link NestedScrollView}'s
- */
-public abstract class OnDemandRecyclerViewScrollListener implements NestedScrollView.OnScrollChangeListener {
+/** An OnDemandNestedScrollViewListener for {@link RecyclerView} pagination in {@link NestedScrollView}'s */
+public class OnDemandRecyclerViewScrollListener implements NestedScrollView.OnScrollChangeListener {
   private static final int DEFAULT_VISIBLE_THRESHOLD_DP = 100;
+
+  @NonNull
   private final RecyclerView recyclerView;
 
   private boolean enabled = true;
@@ -22,10 +20,13 @@ public abstract class OnDemandRecyclerViewScrollListener implements NestedScroll
   @Dimension(unit = Dimension.PX)
   private int visibleThreshold;
 
-  public OnDemandRecyclerViewScrollListener(@NonNull RecyclerView recyclerView) {
+  private LoadingProvider loadingProvider;
+
+  public OnDemandRecyclerViewScrollListener(@NonNull RecyclerView recyclerView, @NonNull LoadingProvider loadingProvider) {
     this.recyclerView = recyclerView;
+    this.loadingProvider = loadingProvider;
     visibleThreshold = MetricsHelper.dpToPxInt(recyclerView.getResources(), DEFAULT_VISIBLE_THRESHOLD_DP);
-    loadNextPage(page);
+    loadingProvider.loadNextPage(page);
   }
 
   /**
@@ -44,6 +45,15 @@ public abstract class OnDemandRecyclerViewScrollListener implements NestedScroll
    */
   public void setVisibleThreshold(@Dimension(unit = Dimension.PX) int threshold) {
     this.visibleThreshold = threshold;
+  }
+
+  /**
+   * Sets a {@link LoadingProvider} that provides the on demand loading capabilities.
+   *
+   * @param loadingProvider The {@link LoadingProvider} to be set.
+   */
+  public void setLoadingProvider(@NonNull LoadingProvider loadingProvider) {
+    this.loadingProvider = loadingProvider;
   }
 
   /**
@@ -78,14 +88,7 @@ public abstract class OnDemandRecyclerViewScrollListener implements NestedScroll
     if ((scrollY + visibleThreshold >= (recyclerView.getMeasuredHeight() - nestedScrollView.getMeasuredHeight())) &&
         scrollY > oldScrollY && !loading && enabled) {
       loading = true;
-      loadNextPage(page);
+      loadingProvider.loadNextPage(page);
     }
   }
-
-  /**
-   * Called when the scroll position of the nested scroll view reaches the end of the current page.
-   *
-   * @param page The next page to be loaded.
-   */
-  protected abstract void loadNextPage(int page);
 }
