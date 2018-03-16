@@ -11,6 +11,9 @@ import java.util.List;
 /**
  * A Base RecyclerViewAdapter with already implemented functions such as
  * setting, removing, adding items, getting its count among others.
+ *
+ * @param <T> Item's class this adapter will hold.
+ * @param <VH> A class that extends ViewHolder that will be used by the adapter.
  */
 public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder>
     extends BaseRecyclerViewAdapter implements RecycleItemType<T, VH> {
@@ -55,7 +58,7 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @param item The item to be added.
    */
   @SuppressWarnings("unused")
-  public void addItem(@NonNull Object item) {
+  public void addItem(@NonNull T item) {
     addItem(this, item);
   }
 
@@ -68,7 +71,7 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @return if items was successfully added.
    */
   @SuppressWarnings("unused")
-  public boolean addItems(int index, @Nullable List<?> items) {
+  public boolean addItems(int index, @Nullable List<T> items) {
     return addItems(index, this, items);
   }
 
