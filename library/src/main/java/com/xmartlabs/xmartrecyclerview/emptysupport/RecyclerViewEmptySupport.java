@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.xmartlabs.xmartrecyclerview.R;
 
@@ -95,11 +97,29 @@ public class RecyclerViewEmptySupport extends RecyclerView {
     attributes.recycle();
   }
 
+  @Nullable
+  private View findEmptyViewById(@Nullable View view, @IdRes int emptyViewId) {
+    if (view == null) {
+      return null;
+    }
+
+    ViewParent parent = view.getParent();
+    if (parent != null && parent instanceof ViewGroup) {
+      View emptyView = ((ViewGroup) parent).findViewById(emptyViewId);
+      if (emptyView == null) {
+        return findEmptyViewById((View) parent, emptyViewId);
+      } else {
+        return emptyView;
+      }
+    }
+    return null;
+  }
+
   /** Initializes the empty view using the resource identifier {@link #emptyViewId}, if it exists. */
   private void initializeEmptyView() {
     if (emptyViewId > 0) {
       post(() -> {
-        emptyView = getRootView().findViewById(emptyViewId);
+        emptyView = findEmptyViewById(RecyclerViewEmptySupport.this, emptyViewId);
         if (emptyView != null) {
           showCorrectView();
         }
