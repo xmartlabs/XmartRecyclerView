@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview;
+package com.xmartlabs.xmartrecyclerview.emptysupport;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,13 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.xmartlabs.xmartrecyclerview.common.Function;
+import com.xmartlabs.xmartrecyclerview.R;
 
 /**
  * {@link RecyclerView} subclass that automatically handles empty state.
  *
  * A {@link RecyclerView} is in an empty state when its adapter holds zero items,
- * or if the callback function {@link #isInEmptyState} is set and returns true.
+ * or if the callback function {@link #isInEmptyStateProvider} is set and returns true.
  *
  * In the empty state, the {@link RecyclerView} will be hidden and a view will be shown.
  * The empty state view to be shown can be defined in two ways:
@@ -23,6 +23,9 @@ import com.xmartlabs.xmartrecyclerview.common.Function;
  * <li>By means of {@link #setEmptyView(View)} method</li>
  * <li>By setting the attribute {@code app:emptyViewId} in the recycler view and point to a view in the hierarchy</li>
  * </ol>
+ *
+ * There is a loading state, in which the {@link RecyclerView} will be shown, and the empty view will be hidden.
+ * That is done to avoid showing the empty view when the list has not been loaded yet.
  */
 public class RecyclerViewEmptySupport extends RecyclerView {
   @Nullable
@@ -30,7 +33,7 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   @IdRes
   private int emptyViewId;
   @Nullable
-  private Function<RecyclerView, Boolean> isInEmptyState;
+  private LoadingStateProvider isInEmptyStateProvider;
 
   @NonNull
   private final RecyclerView.AdapterDataObserver emptyObserver = new AdapterDataObserver() {
@@ -107,7 +110,8 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   /**
    * Decides which view should be visible (recycler view or empty view) and shows it
    *
-   * To do that, it checks for the presence of {@link #isInEmptyState} callback and uses it to determine whether or not
+   * To do that, it checks for the presence of {@link #isInEmptyStateProvider} callback and uses it to determine whether or
+   * not
    * the empty view should be shown.
    * If the callback was not set, then it uses the adapter item count information, where zero elements means the empty
    * state should be shown.
@@ -115,11 +119,10 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   private void showCorrectView() {
     Adapter<?> adapter = getAdapter();
     if (emptyView != null) {
-      boolean hasItems = isInEmptyState == null
-          ? adapter == null || adapter.getItemCount() > 0
-          : isInEmptyState.apply(this);
-      emptyView.setVisibility(hasItems ? GONE : VISIBLE);
-      setVisibility(hasItems ? VISIBLE : GONE);
+      boolean showRecyclerView = (adapter != null && adapter.getItemCount() > 0
+          || (isInEmptyStateProvider != null && isInEmptyStateProvider.isInLoadingState()));
+      emptyView.setVisibility(showRecyclerView ? GONE : VISIBLE);
+      setVisibility(showRecyclerView ? VISIBLE : GONE);
     }
   }
 
@@ -149,15 +152,17 @@ public class RecyclerViewEmptySupport extends RecyclerView {
   }
 
   /**
-   * Sets the empty state callback check.
+   * Sets the loading state provider.
    *
-   * The callback will be called each time a decision is to be made to whether show or hide the empty view.
+   * The provider will be checked each time a decision is to be made to whether show or hide the empty view.
+   * If the result of calling this function is true, the empty view is disabled and hidden.
+   * Otherwise, the empty view is enabled and its visibility, by the number of element on the list.
    *
-   * @param isInEmptyState the callback function to determine if the recycler view is in an empty state
+   * @param loadingStateProvider the provider function to determine if the recycler view is in loading state
    */
   @SuppressWarnings("unused")
-  public void setIsInEmptyState(@Nullable Function<RecyclerView, Boolean> isInEmptyState) {
-    this.isInEmptyState = isInEmptyState;
+  public void setIsInLoadingStateProvider(@Nullable LoadingStateProvider loadingStateProvider) {
+    this.isInEmptyStateProvider = loadingStateProvider;
     showCorrectView();
   }
 
