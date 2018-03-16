@@ -91,7 +91,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * @param addTypeIfNeeded A boolean specifying if the item type has to be added to the type collection.
    *                        If this parameter is true, the type will be added only if it wasn't added yet.
    */
-  private <T extends RecycleItemType> void addItemWithoutNotifying(int index, @NonNull T type, @Nullable Object item,
+  private <T extends RecycleItemType> void addItemWithoutNotifying(int index, @NonNull T type, @NonNull Object item,
                                                                    boolean addTypeIfNeeded) {
     Element element = new Element(type, item);
     items.add(index, element);
@@ -228,7 +228,6 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
       return;
     }
 
-
     final List<T> newItemsContent = new ArrayList<>();
     for (Pair<? extends RecycleItemType, T> item : newItems) {
       newItemsContent.add(item.second);
@@ -243,6 +242,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     updateItemsQueuedManager.update(updateDiffCallback, diffResult -> {
       items.clear();
       for (Pair<? extends RecycleItemType, T> pair : newItems) {
+        //noinspection ConstantConditions
         addItemWithoutNotifying(pair.first, pair.second, true);
       }
       diffResult.dispatchUpdatesTo(this);
