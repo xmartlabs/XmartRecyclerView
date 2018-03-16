@@ -71,7 +71,7 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @return if items was successfully added.
    */
   @SuppressWarnings("unused")
-  public boolean addItems(int index, @Nullable List<T> items) {
+  public boolean addItems(int index, @Nullable List<? extends T> items) {
     return addItems(index, this, items);
   }
 
