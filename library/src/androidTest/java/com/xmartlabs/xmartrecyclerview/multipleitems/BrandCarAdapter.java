@@ -16,7 +16,7 @@ import com.xmartlabs.xmartrecyclerview.test.R;
 
 import java.util.List;
 
-public class BrandCarAdapter extends BaseRecyclerViewAdapter {
+public class BrandCarAdapter extends BaseRecyclerViewAdapter<BrandCarAdapter.CarViewHolder> {
   private final SingleItemRecyclerViewItemType<Car, CarViewHolder> carItemType =
       new SingleItemRecyclerViewItemType<Car, CarViewHolder>() {
         @NonNull
