@@ -7,9 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion project.ext.targetSdkVersion
-        versionCode project.ext.versionCode
-        versionName project.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionCode 1
+        versionName '1.0.0'
     }
     buildTypes {
         release {
@@ -20,10 +19,7 @@ android {
 }
 
 dependencies {
-    androidTestImplementation "com.android.support.test:runner:${libraryVersion.testRunner}"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${libraryVersion.espresso}"
-
+    implementation project(':library')
     implementation "com.android.support:appcompat-v7:${libraryVersion.androidSupport}"
-
-    testImplementation "junit:junit:${libraryVersion.junit}"
+    implementation "com.android.support:recyclerview-v7:${libraryVersion.androidSupport}"
 }
