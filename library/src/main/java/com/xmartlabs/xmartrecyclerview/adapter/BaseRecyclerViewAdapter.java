@@ -24,9 +24,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
   @NonNull
-  private final List<Element<T, VH, ?>> elements = new ArrayList<>();
+  private final List<Element<? extends T, ? extends VH, ?>> elements = new ArrayList<>();
   @NonNull
-  private final List<RecycleItemType<T, VH>> types = new ArrayList<>();
+  private final List<RecycleItemType<? extends T, ? extends VH>> types = new ArrayList<>();
   private final UpdateItemsQueuedManager updateItemsQueuedManager = new UpdateItemsQueuedManager();
 
   public BaseRecyclerViewAdapter() {}
@@ -68,8 +68,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
    *                        If this parameter is true, the type will be added only if it wasn't added yet.
    */
   @SuppressWarnings("WeakerAccess")
-  protected <VT extends RecycleItemType<T, VH>> void addItemWithoutNotifying(@NonNull VT type, @NonNull T item,
-                                                                             boolean addTypeIfNeeded) {
+  protected <I extends T, H extends VH, VT extends RecycleItemType<I, H>> void addItemWithoutNotifying(@NonNull VT type,
+                                                                                                       @NonNull I item,
+                                                                                                       boolean addTypeIfNeeded) {
     addItemWithoutNotifying(elements.size(), type, item, addTypeIfNeeded);
   }
 
@@ -83,9 +84,11 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
    * @param addTypeIfNeeded A boolean specifying if the item type has to be added to the type collection.
    *                        If this parameter is true, the type will be added only if it wasn't added yet.
    */
-  private <VT extends RecycleItemType<T, VH>> void addItemWithoutNotifying(int index, @NonNull VT type,
-                                                                           @NonNull T item, boolean addTypeIfNeeded) {
-    Element<T, VH, VT> element = new Element<>(type, item);
+  private <I extends T, H extends VH, VT extends RecycleItemType<I, H>> void addItemWithoutNotifying(int index,
+                                                                                                     @NonNull VT type,
+                                                                                                     @NonNull I item,
+                                                                                                     boolean addTypeIfNeeded) {
+    Element<I, H, VT> element = new Element<>(type, item);
     elements.add(index, element);
     if (addTypeIfNeeded) {
       addItemTypeIfNeeded(type);
@@ -97,7 +100,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
    *
    * @param type The type to be added.
    */
-  private <VT extends RecycleItemType<T, VH>> void addItemTypeIfNeeded(@NonNull VT type) {
+  private <VT extends RecycleItemType<? extends T, ? extends VH>> void addItemTypeIfNeeded(@NonNull VT type) {
     if (!types.contains(type)) {
       types.add(type);
     }
@@ -110,7 +113,8 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
    * @param item The item to be added.
    */
   @MainThread
-  protected <VT extends RecycleItemType<T, VH>> void addItem(@NonNull VT type, @NonNull T item) {
+  protected <I extends T, H extends VH, VT extends RecycleItemType<I, H>> void addItem(@NonNull VT type,
+                                                                                       @NonNull I item) {
     addItemWithoutNotifying(type, item, true);
     notifyItemInserted(elements.size() - 1);
   }
