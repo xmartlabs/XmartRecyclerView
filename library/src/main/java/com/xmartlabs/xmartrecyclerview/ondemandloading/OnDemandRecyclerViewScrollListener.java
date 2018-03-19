@@ -1,32 +1,37 @@
 package com.xmartlabs.xmartrecyclerview.ondemandloading;
 
-import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-/** An OnDemandNestedScrollViewListener for {@link RecyclerView} pagination in {@link NestedScrollView}'s */
-public class OnDemandRecyclerViewScrollListener implements NestedScrollView.OnScrollChangeListener {
-  private static final int DEFAULT_VISIBLE_THRESHOLD_DP = 100;
-
-  @NonNull
-  private final RecyclerView recyclerView;
+/** An OnDemandRecyclerViewScrollListener for {@link RecyclerView} pagination */
+public class OnDemandRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
+  public static final int VISIBLE_THRESHOLD_DEFAULT = 5;
 
   private boolean enabled = true;
   private boolean loading = true;
-  private int page = 1;
-  private int previousRecyclerViewHeight;
 
-  @Dimension(unit = Dimension.PX)
-  private int visibleThreshold;
+  private int lastVisibleItem;
+  private int firstPage = 1;
+  private int page = firstPage;
+  private int previousTotal;
+  private int totalItemCount;
+  private int visibleItemCount;
+  private int visibleThreshold = VISIBLE_THRESHOLD_DEFAULT;
 
-  private LoadingProvider loadingProvider;
+  private PageLoadingProvider pageLoadingProvider;
 
-  public OnDemandRecyclerViewScrollListener(@NonNull RecyclerView recyclerView, @NonNull LoadingProvider loadingProvider) {
-    this.recyclerView = recyclerView;
-    this.loadingProvider = loadingProvider;
-    visibleThreshold = MetricsHelper.dpToPxInt(recyclerView.getResources(), DEFAULT_VISIBLE_THRESHOLD_DP);
-    loadingProvider.loadNextPage(page);
+  public OnDemandRecyclerViewScrollListener(@NonNull PageLoadingProvider pageLoadingProvider) {
+    pageLoadingProvider.loadPage(page);
+  }
+
+  /**
+   * Sets the first page of the RecyclerView
+   *
+   * @param firstPage First page of the RecyclerView
+   */
+  public void setFirstPage(int firstPage) {
+    this.firstPage = firstPage;
   }
 
   /**
@@ -39,56 +44,81 @@ public class OnDemandRecyclerViewScrollListener implements NestedScrollView.OnSc
   }
 
   /**
-   * Sets the value of the visible threshold for the on demand loading.
+   * Sets the visible threshold, in items, for the on demand loading to happen.
    *
-   * @param threshold A value that specifies the visible threshold for the on demand loading to happen.
+   * @param threshold Visible threshold, in items, for the on demand loading to happen.
    */
-  public void setVisibleThreshold(@Dimension(unit = Dimension.PX) int threshold) {
+  public void setVisibleThreshold(int threshold) {
     this.visibleThreshold = threshold;
   }
 
   /**
-   * Sets a {@link LoadingProvider} that provides the on demand loading capabilities.
+   * Sets a {@link PageLoadingProvider} that provides the on demand loading capabilities.
    *
-   * @param loadingProvider The {@link LoadingProvider} to be set.
+   * @param pageLoadingProvider The {@link PageLoadingProvider} to be set.
    */
-  public void setLoadingProvider(@NonNull LoadingProvider loadingProvider) {
-    this.loadingProvider = loadingProvider;
+  public void setPageLoadingProvider(@NonNull PageLoadingProvider pageLoadingProvider) {
+    this.pageLoadingProvider = pageLoadingProvider;
   }
 
   /**
-   * Resets to the initial nested scroll view values.
+   * Resets to the initial view values.
+   *
+   * @param layoutManager The {@link LinearLayoutManager} of the RecyclerView.
    */
-  public void resetStatus() {
+  public void resetStatus(@NonNull LinearLayoutManager layoutManager) {
     enabled = true;
-    visibleThreshold = MetricsHelper.dpToPxInt(recyclerView.getResources(), DEFAULT_VISIBLE_THRESHOLD_DP);
+    previousTotal = 0;
     loading = false;
-    previousRecyclerViewHeight = recyclerView.getMeasuredHeight();
-    page = 1;
+    lastVisibleItem = 0;
+    visibleItemCount = getLastVisibleItemPosition(layoutManager);
+    totalItemCount = getTotalItemCount(layoutManager);
+    page = firstPage;
+    checkIfLoadingIsNeeded();
   }
 
   /**
    * Called when the scroll position of the nested scroll view changes.
    *
-   * @param nestedScrollView The view whose scroll position has changed.
-   * @param scrollX          Current horizontal scroll origin.
-   * @param scrollY          Current vertical scroll origin.
-   * @param oldScrollX       Previous horizontal scroll origin.
-   * @param oldScrollY       Previous vertical scroll origin.
+   * @param recyclerView The RecyclerView whose scroll position has changed.
+   * @param dx          The amount of horizontal scroll.
+   * @param dy          The amount of vertical scroll.
    */
   @Override
-  public void onScrollChange(@NonNull NestedScrollView nestedScrollView, int scrollX, int scrollY,
-                             int oldScrollX, int oldScrollY) {
-    if (previousRecyclerViewHeight < recyclerView.getMeasuredHeight()) {
-      loading = false;
-      page++;
-      previousRecyclerViewHeight = recyclerView.getMeasuredHeight();
-    }
+  public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+    super.onScrolled(recyclerView, dx, dy);
 
-    if ((scrollY + visibleThreshold >= (recyclerView.getMeasuredHeight() - nestedScrollView.getMeasuredHeight())) &&
-        scrollY > oldScrollY && !loading && enabled) {
-      loading = true;
-      loadingProvider.loadNextPage(page);
+    visibleItemCount = recyclerView.getChildCount();
+
+    if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+      LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+      totalItemCount = getTotalItemCount(layoutManager);
+      lastVisibleItem = getLastVisibleItemPosition(layoutManager);
+
+      checkIfLoadingIsNeeded();
+    } else {
+      throw new IllegalStateException("The RecyclerView's LayoutManager should be of the LinearLayoutManager type");
     }
+  }
+
+  private void checkIfLoadingIsNeeded() {
+    if (loading) {
+      if (totalItemCount > previousTotal) {
+        loading = false;
+        page++;
+        previousTotal = totalItemCount;
+      }
+    } else if (enabled && (totalItemCount - visibleItemCount) <= (lastVisibleItem + visibleThreshold)) {
+      pageLoadingProvider.loadPage(page);
+      loading = true;
+    }
+  }
+
+  private int getLastVisibleItemPosition(@NonNull LinearLayoutManager layoutManager) {
+    return layoutManager.findLastVisibleItemPosition();
+  }
+
+  private int getTotalItemCount(@NonNull LinearLayoutManager layoutManager) {
+    return layoutManager.getItemCount();
   }
 }
