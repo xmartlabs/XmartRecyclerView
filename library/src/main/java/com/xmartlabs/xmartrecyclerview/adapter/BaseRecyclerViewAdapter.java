@@ -21,25 +21,18 @@ import java.util.List;
  * A Base RecyclerViewAdapter with already implemented functions such as
  * Setting, removing, adding items, getting its count among others.
  */
-public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+@SuppressWarnings("unused")
+public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
   @NonNull
-  private final List<Element> items;
+  private final List<Element<? extends T, ? extends VH, ?>> elements = new ArrayList<>();
   @NonNull
-  private final List<RecycleItemType> types = new ArrayList<>();
+  private final List<RecycleItemType<? extends T, ? extends VH>> types = new ArrayList<>();
   private final UpdateItemsQueuedManager updateItemsQueuedManager = new UpdateItemsQueuedManager();
 
-  public BaseRecyclerViewAdapter() {
-    this(new ArrayList<>());
-  }
-
-  @SuppressWarnings("WeakerAccess")
-  public BaseRecyclerViewAdapter(@NonNull List<Element> items) {
-    this.items = items;
-  }
+  public BaseRecyclerViewAdapter() {}
 
   @Override
-  public final RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    //noinspection unchecked
+  public final VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     return types.get(viewType).onCreateViewHolder(parent);
   }
 
@@ -49,7 +42,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * @param item the item to be removed.
    */
   @MainThread
-  public void removeItem(@NonNull Object item) {
+  public void removeItem(@NonNull T item) {
     removeItemsByCondition(element -> Utils.equals(item, element.getItem()));
   }
 
@@ -59,9 +52,8 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * @param items the list of items to be removed.
    */
   @MainThread
-  @SuppressWarnings("WeakerAccess")
-  public void removeItems(@NonNull List<Object> items) {
-    for (Object item : items) {
+  public void removeItems(@NonNull List<? extends T> items) {
+    for (T item : items) {
       removeItem(item);
     }
   }
@@ -76,9 +68,10 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    *                        If this parameter is true, the type will be added only if it wasn't added yet.
    */
   @SuppressWarnings("WeakerAccess")
-  protected <T extends RecycleItemType> void addItemWithoutNotifying(@NonNull T type, @NonNull Object item,
-                                                                     boolean addTypeIfNeeded) {
-    addItemWithoutNotifying(items.size(), type, item, addTypeIfNeeded);
+  protected <I extends T, H extends VH, VT extends RecycleItemType<I, H>> void addItemWithoutNotifying(@NonNull VT type,
+                                                                                                       @NonNull I item,
+                                                                                                       boolean addTypeIfNeeded) {
+    addItemWithoutNotifying(elements.size(), type, item, addTypeIfNeeded);
   }
 
   /**
@@ -91,10 +84,12 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * @param addTypeIfNeeded A boolean specifying if the item type has to be added to the type collection.
    *                        If this parameter is true, the type will be added only if it wasn't added yet.
    */
-  private <T extends RecycleItemType> void addItemWithoutNotifying(int index, @NonNull T type, @Nullable Object item,
-                                                                   boolean addTypeIfNeeded) {
-    Element element = new Element(type, item);
-    items.add(index, element);
+  private <I extends T, H extends VH, VT extends RecycleItemType<I, H>> void addItemWithoutNotifying(int index,
+                                                                                                     @NonNull VT type,
+                                                                                                     @NonNull I item,
+                                                                                                     boolean addTypeIfNeeded) {
+    Element<I, H, VT> element = new Element<>(type, item);
+    elements.add(index, element);
     if (addTypeIfNeeded) {
       addItemTypeIfNeeded(type);
     }
@@ -105,7 +100,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    *
    * @param type The type to be added.
    */
-  private <T extends RecycleItemType> void addItemTypeIfNeeded(@NonNull T type) {
+  private <VT extends RecycleItemType<? extends T, ? extends VH>> void addItemTypeIfNeeded(@NonNull VT type) {
     if (!types.contains(type)) {
       types.add(type);
     }
@@ -118,9 +113,10 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * @param item The item to be added.
    */
   @MainThread
-  protected <T extends RecycleItemType> void addItem(@NonNull T type, @NonNull Object item) {
+  protected <I extends T, H extends VH, VT extends RecycleItemType<I, H>> void addItem(@NonNull VT type,
+                                                                                       @NonNull I item) {
     addItemWithoutNotifying(type, item, true);
-    notifyItemInserted(items.size() - 1);
+    notifyItemInserted(elements.size() - 1);
   }
 
   /**
@@ -133,13 +129,14 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    */
   @MainThread
   @SuppressWarnings("WeakerAccess")
-  protected <T extends RecycleItemType> boolean addItems(int index, @NonNull T type, @Nullable List<?> items) {
+  protected <VT extends RecycleItemType<T, VH>> boolean addItems(int index, @NonNull VT type,
+                                                                 @Nullable List<? extends T> items) {
     if (Utils.isNullOrEmpty(items)) {
       return false;
     }
     int lastItemCount = getItemCount();
     for (int i = 0; i < items.size(); i++) {
-      Object item = items.get(0);
+      T item = items.get(i);
       addItemWithoutNotifying(index + i, type, item, false);
     }
     addItemTypeIfNeeded(type);
@@ -156,12 +153,12 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    */
   @MainThread
   @SuppressWarnings("WeakerAccess")
-  protected <T extends RecycleItemType> boolean addItems(@NonNull T type, @Nullable List<?> items) {
+  protected <VT extends RecycleItemType<T, VH>> boolean addItems(@NonNull VT type, @Nullable List<? extends T> items) {
     if (Utils.isNullOrEmpty(items)) {
       return false;
     }
     int lastItemCount = getItemCount();
-    for (Object item : items) {
+    for (T item : items) {
       addItemWithoutNotifying(type, item, false);
     }
 
@@ -185,9 +182,10 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * @param areContentTheSameFunction A function which checks that the content of two items are the same.
    */
   @SuppressWarnings("WeakerAccess")
-  protected <T, R extends RecycleItemType> void setItems(@NonNull R type, final @Nullable List<T> newItems,
-                                                         @NonNull BiFunction<T, T, Boolean> areItemsTheSameFunction,
-                                                         @NonNull BiFunction<T, T, Boolean> areContentTheSameFunction) {
+  protected <VT extends RecycleItemType<T, VH>> void setItems(@NonNull VT type,
+                                                              final @Nullable List<? extends T> newItems,
+                                                              final @NonNull BiFunction<T, T, Boolean> areItemsTheSameFunction,
+                                                              final @NonNull BiFunction<T, T, Boolean> areContentTheSameFunction) {
     if (Utils.isNullOrEmpty(newItems)) {
       clearAll();
       return;
@@ -200,7 +198,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     );
 
     updateItemsQueuedManager.update(updateDiffCallback, diffResult -> {
-      items.clear();
+      elements.clear();
       for (T item : newItems) {
         addItemWithoutNotifying(type, item, false);
       }
@@ -215,19 +213,17 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    * changed. It uses a function that calculates the difference between the old and the new items
    * in order to improve the update process.
    *
-   * @param <T>                       Type of the items to be added.
    * @param newItems                  Items to be added. Each Pair consists of an item and its RecycleItemType.
    * @param areItemsTheSameFunction   A function which checks that two items are the same.
    * @param areContentTheSameFunction A function which checks that the content of two items are the same.
    */
-  protected <T> void setMultipleTypeItems(final @Nullable List<Pair<? extends RecycleItemType, T>> newItems,
-                                          @NonNull BiFunction<T, T, Boolean> areItemsTheSameFunction,
-                                          @NonNull BiFunction<T, T, Boolean> areContentTheSameFunction) {
+  protected void setMultipleTypeItems(final @Nullable List<Pair<? extends RecycleItemType<T, VH>, T>> newItems,
+                                      @NonNull BiFunction<T, T, Boolean> areItemsTheSameFunction,
+                                      @NonNull BiFunction<T, T, Boolean> areContentTheSameFunction) {
     if (Utils.isNullOrEmpty(newItems)) {
       clearAll();
       return;
     }
-
 
     final List<T> newItemsContent = new ArrayList<>();
     for (Pair<? extends RecycleItemType, T> item : newItems) {
@@ -241,8 +237,9 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     );
 
     updateItemsQueuedManager.update(updateDiffCallback, diffResult -> {
-      items.clear();
-      for (Pair<? extends RecycleItemType, T> pair : newItems) {
+      elements.clear();
+      for (Pair<? extends RecycleItemType<T, VH>, T> pair : newItems) {
+        //noinspection ConstantConditions
         addItemWithoutNotifying(pair.first, pair.second, true);
       }
       diffResult.dispatchUpdatesTo(this);
@@ -250,14 +247,14 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
   }
 
   @NonNull
-  private <T> DiffUtil.Callback getUpdateDiffCallback(
-      @NonNull final List<T> newItems,
+  private DiffUtil.Callback getUpdateDiffCallback(
+      @NonNull final List<? extends T> newItems,
       @NonNull final BiFunction<T, T, Boolean> areItemsTheSameFunction,
       @NonNull final BiFunction<T, T, Boolean> areContentTheSameFunction) {
     return new DiffUtil.Callback() {
       @Override
       public int getOldListSize() {
-        return items.size();
+        return elements.size();
       }
 
       @Override
@@ -268,9 +265,8 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
       @Override
       public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
         try {
-          //noinspection unchecked
           return areItemsTheSameFunction.apply(
-              (T) items.get(oldItemPosition).getItem(),
+              elements.get(oldItemPosition).getItem(),
               newItems.get(newItemPosition));
         } catch (Exception ex) {
           ex.printStackTrace();
@@ -281,9 +277,8 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
       @Override
       public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         try {
-          //noinspection unchecked
           return areContentTheSameFunction.apply(
-              (T) items.get(oldItemPosition).getItem(),
+              elements.get(oldItemPosition).getItem(),
               newItems.get(newItemPosition));
         } catch (Exception ex) {
           ex.printStackTrace();
@@ -302,8 +297,8 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    */
   @MainThread
   @SuppressWarnings("WeakerAccess")
-  protected <T extends RecycleItemType> void setItems(@NonNull T type, @Nullable List<?> newItems) {
-    items.clear();
+  protected <VT extends RecycleItemType<T, VH>> void setItems(@NonNull VT type, @Nullable List<? extends T> newItems) {
+    elements.clear();
     addItems(type, newItems);
   }
 
@@ -314,7 +309,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    */
   @Override
   public int getItemCount() {
-    return items.size();
+    return elements.size();
   }
 
   /**
@@ -332,7 +327,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
   @CallSuper
   @Override
   public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-    Element element = items.get(position);
+    Element element = elements.get(position);
     Object item = element.getItem();
     //noinspection unchecked
     element.getType().onBindViewHolder(viewHolder, item, position);
@@ -350,7 +345,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
    */
   @Override
   public int getItemViewType(int position) {
-    return types.indexOf(items.get(position).getType());
+    return types.indexOf(elements.get(position).getType());
   }
 
   /**
@@ -359,7 +354,7 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
   @MainThread
   @SuppressWarnings("WeakerAccess")
   public void clearAll() {
-    items.clear();
+    elements.clear();
     notifyDataSetChanged();
   }
 
@@ -375,13 +370,13 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
   }
 
   private void removeItemsByCondition(@NonNull Function<Element, Boolean> conditionToRemoveItem) {
-    if (Utils.isNullOrEmpty(items)) {
+    if (Utils.isNullOrEmpty(elements)) {
       return;
     }
 
     List<Integer> indexesToRemove = new ArrayList<>();
-    for (int i = 0; i < items.size(); i++) {
-      Element element = items.get(i);
+    for (int i = 0; i < elements.size(); i++) {
+      Element element = elements.get(i);
       if (conditionToRemoveItem.apply(element)) {
         indexesToRemove.add(i);
       }
@@ -389,29 +384,30 @@ public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     for (int i = indexesToRemove.size() - 1; i >= 0; i--) {
       int index = indexesToRemove.get(i);
-      items.remove(index);
+      elements.remove(index);
       notifyItemRemoved(index);
     }
   }
 
-  private static class Element {
+  private static class Element<T, VH extends RecyclerView.ViewHolder,
+      VT extends RecycleItemType<T, VH>> {
     @NonNull
-    private final RecycleItemType type;
+    private final VT type;
     @NonNull
-    private final Object item;
+    private final T item;
 
-    Element(@NonNull RecycleItemType type, @NonNull Object item) {
+    Element(@NonNull VT type, @NonNull T item) {
       this.type = type;
       this.item = item;
     }
 
     @NonNull
-    RecycleItemType getType() {
+    VT getType() {
       return type;
     }
 
     @NonNull
-    Object getItem() {
+    T getItem() {
       return item;
     }
   }
