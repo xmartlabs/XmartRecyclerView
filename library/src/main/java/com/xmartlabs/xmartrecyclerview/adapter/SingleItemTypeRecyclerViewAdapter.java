@@ -11,9 +11,13 @@ import java.util.List;
 /**
  * A Base RecyclerViewAdapter with already implemented functions such as
  * setting, removing, adding items, getting its count among others.
+ *
+ * @param <T>  Item's class this adapter will hold.
+ * @param <VH> A class that extends ViewHolder that will be used by the adapter.
  */
+@SuppressWarnings("unused")
 public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder>
-    extends BaseRecyclerViewAdapter implements RecycleItemType<T, VH> {
+    extends BaseRecyclerViewAdapter<T, VH> implements RecycleItemType<T, VH> {
   /**
    * Sets the items data for the recycler view and notifies any registered observers that the data set has
    * changed.
@@ -21,7 +25,6 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @param items the items that will be recycler view data.
    */
   @MainThread
-  @SuppressWarnings("unused")
   public void setItems(@Nullable List<? extends T> items) {
     setItems(this, items);
   }
@@ -32,7 +35,6 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @param items array of items that will be the data for the recycler view.
    */
   @MainThread
-  @SuppressWarnings("unused")
   public void setItems(@NonNull T[] items) {
     setItems(Arrays.asList(items));
   }
@@ -44,7 +46,6 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @return if item was successfully added
    */
   @MainThread
-  @SuppressWarnings("unused")
   public boolean addItems(@Nullable List<? extends T> items) {
     return addItems(this, items);
   }
@@ -54,8 +55,7 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    *
    * @param item The item to be added.
    */
-  @SuppressWarnings("unused")
-  public void addItem(@NonNull Object item) {
+  public void addItem(@NonNull T item) {
     addItem(this, item);
   }
 
@@ -67,8 +67,8 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @param items The items that will be the data for the recycler view.
    * @return if items was successfully added.
    */
-  @SuppressWarnings("unused")
-  public boolean addItems(int index, @Nullable List<?> items) {
+  @SuppressWarnings("UnusedReturnValue")
+  public boolean addItems(int index, @Nullable List<? extends T> items) {
     return addItems(index, this, items);
   }
 
@@ -81,8 +81,7 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
    * @param areItemsTheSameFunction   A function which checks that two items are the same.
    * @param areContentTheSameFunction A function which checks that the content of two items are the same.
    */
-  @SuppressWarnings("unused")
-  protected void setItems(final @Nullable List<T> newItems,
+  protected void setItems(final @Nullable List<? extends T> newItems,
                           @NonNull BiFunction<T, T, Boolean> areItemsTheSameFunction,
                           @NonNull BiFunction<T, T, Boolean> areContentTheSameFunction) {
     setItems(this, newItems, areItemsTheSameFunction, areContentTheSameFunction);
