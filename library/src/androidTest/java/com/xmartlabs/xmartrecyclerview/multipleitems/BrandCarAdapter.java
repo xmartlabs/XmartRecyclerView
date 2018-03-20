@@ -2,6 +2,7 @@ package com.xmartlabs.xmartrecyclerview.multipleitems;
 
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import com.xmartlabs.xmartrecyclerview.test.R;
 
 import java.util.List;
 
-public class BrandCarAdapter extends BaseRecyclerViewAdapter {
+class BrandCarAdapter extends BaseRecyclerViewAdapter<Object, RecyclerView.ViewHolder> {
   private final SingleItemRecyclerViewItemType<Car, CarViewHolder> carItemType =
       new SingleItemRecyclerViewItemType<Car, CarViewHolder>() {
         @NonNull
@@ -36,7 +37,7 @@ public class BrandCarAdapter extends BaseRecyclerViewAdapter {
       };
 
   @MainThread
-  public void setItems(@NonNull List<Brand> brands) {
+  void setItems(@NonNull List<Brand> brands) {
     Stream.of(brands)
         .forEach(brand -> {
           addItem(brandItemType, brand);

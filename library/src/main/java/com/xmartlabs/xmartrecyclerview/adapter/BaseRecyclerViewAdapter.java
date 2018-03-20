@@ -19,9 +19,11 @@ import java.util.List;
 
 /**
  * A Base RecyclerViewAdapter with already implemented functions such as
- * Setting, removing, adding items, getting its count among others.
+ * setting, removing, adding items, getting its count among others.
+ *
+ * @param <T>  Items class.
+ * @param <VH> A class that extends ViewHolder that will be used by the adapter.
  */
-@SuppressWarnings("unused")
 public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
   @NonNull
   private final List<Element<? extends T, ? extends VH, ?>> elements = new ArrayList<>();
@@ -315,7 +317,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
   /**
    * Inflates the view layout/elements.
    *
-   * @param parent      the parent viewgroup.
+   * @param parent      the parent ViewGroup.
    * @param layoutResId the layout resource id.
    * @return the inflated view.
    */
@@ -326,7 +328,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
 
   @CallSuper
   @Override
-  public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+  public void onBindViewHolder(@NonNull VH viewHolder, int position) {
     Element element = elements.get(position);
     Object item = element.getItem();
     //noinspection unchecked
@@ -389,8 +391,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
     }
   }
 
-  private static class Element<T, VH extends RecyclerView.ViewHolder,
-      VT extends RecycleItemType<T, VH>> {
+  private static class Element<T, VH extends RecyclerView.ViewHolder, VT extends RecycleItemType<T, VH>> {
     @NonNull
     private final VT type;
     @NonNull

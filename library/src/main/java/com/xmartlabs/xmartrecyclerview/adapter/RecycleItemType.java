@@ -9,7 +9,7 @@ import android.view.ViewGroup;
  * {@link VH}.
  *
  * @param <I>  Item type.
- * @param <VH> ViewHolder type.
+ * @param <VH> A class that extends ViewHolder.
  */
 public interface RecycleItemType<I, VH extends RecyclerView.ViewHolder> {
   /**
