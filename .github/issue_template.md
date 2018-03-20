@@ -1,4 +1,4 @@
-Thanks for using XmartRecyclerView but before you post an issue, please consider the following points:
+Thanks for using XmartRecyclerView! Before you post an issue, please consider the following points:
 
   - [ ] Check if the issue was [already reported or fixed](https://github.com/xmartlabs/XmartRecyclerView/issues?utf8=%E2%9C%93&q=is%3Aissue).
 
