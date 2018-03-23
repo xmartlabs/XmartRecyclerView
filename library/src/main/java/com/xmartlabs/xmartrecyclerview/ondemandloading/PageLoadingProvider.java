@@ -1,6 +1,6 @@
 package com.xmartlabs.xmartrecyclerview.ondemandloading;
 
-/** Provides the necessary operations to allow on demand loading while scrolling a {@link android.support.v7.widget.RecyclerView} */
+/** Provides the necessary operations to take control of the loading on demand  */
 public interface PageLoadingProvider {
   /**
    * Called when the scroll position of the RecyclerView reaches the end of the current page.
@@ -9,7 +9,18 @@ public interface PageLoadingProvider {
    */
   void loadPage(int page);
 
+  /**
+   * Called to know if there are more pages to request.
+   * The result will be used before call loadPage method
+   *
+   * @return If there are more pages to use.
+   */
   boolean hasMorePages();
 
+  /**
+   * Called in the initialization to setup the first page.
+   *
+   * @return the number of the first page.
+   */
   int getFirstPage();
 }

@@ -1,7 +1,7 @@
 package com.xmartlabs.xmartrecyclerview.ondemandloading;
 
 import android.support.annotation.NonNull;
-
+/** Provides the necessary operations to allow on demand loading while scrolling a {@link android.support.v7.widget.RecyclerView} */
 @SuppressWarnings("unused")
 public final class BaseOnDemandLoader implements OnDemandLoader {
   private static final int VISIBLE_THRESHOLD_DEFAULT = 5;
