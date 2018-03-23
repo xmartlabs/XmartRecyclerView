@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.common;
+package com.xmartlabs.xmartrecyclerview.adapter;
 
 import android.support.annotation.NonNull;
 
@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
  * @param <R> the type of the result of the function
  *
  */
-public interface Function<T, R> {
+interface Function<T, R> {
 
   /**
    * Applies this function to the given argument.

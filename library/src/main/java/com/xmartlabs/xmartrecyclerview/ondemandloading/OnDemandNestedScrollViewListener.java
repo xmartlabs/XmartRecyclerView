@@ -1,70 +1,58 @@
 package com.xmartlabs.xmartrecyclerview.ondemandloading;
 
+import android.content.Context;
 import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-/** An OnDemandNestedScrollViewListener for {@link RecyclerView} pagination in {@link NestedScrollView}'s */
-public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScrollChangeListener {
+/** An OnDemandRecyclerViewScrollListener for {@link RecyclerView} pagination in {@link NestedScrollView}'s */
+public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScrollChangeListener, ItemContainer,
+    OnDemandLoader {
+  @Dimension(unit = Dimension.DP)
   private static final int DEFAULT_VISIBLE_THRESHOLD_DP = 100;
 
+  private int totalItemCount = 0;
+
   @NonNull
-  private final RecyclerView recyclerView;
+  private final BaseOnDemandLoader onDemandLoader;
 
-  private boolean enabled = true;
-  private boolean loading = true;
-  private int page = 1;
-  private int previousRecyclerViewHeight;
-
-  @Dimension(unit = Dimension.PX)
-  private int visibleThreshold;
-
-  private PageLoadingProvider pageLoadingProvider;
-
-  public OnDemandNestedScrollViewListener(@NonNull RecyclerView recyclerView, @NonNull PageLoadingProvider pageLoadingProvider) {
-    this.recyclerView = recyclerView;
-    this.pageLoadingProvider = pageLoadingProvider;
-    visibleThreshold = MetricsHelper.dpToPxInt(recyclerView.getResources(), DEFAULT_VISIBLE_THRESHOLD_DP);
-    pageLoadingProvider.loadPage(page);
+  public OnDemandNestedScrollViewListener(@NonNull Context context, @NonNull PageLoadingProvider loadingProvider) {
+    onDemandLoader = new BaseOnDemandLoader(loadingProvider, this);
+    onDemandLoader.setVisibleThreshold(MetricsHelper.dpToPxInt(context.getResources(), DEFAULT_VISIBLE_THRESHOLD_DP));
   }
 
-  /**
-   * Enables or disables the loading on demand when scrolling.
-   *
-   * @param isEnabled A boolean specifying if loading on demand should be enabled or not.
-   */
+  @Override
   public void setEnabled(boolean isEnabled) {
-    this.enabled = isEnabled;
+    onDemandLoader.setEnabled(isEnabled);
   }
 
-  /**
-   * Sets the value of the visible threshold for the on demand loading.
-   *
-   * @param threshold A value that specifies the visible threshold for the on demand loading to happen.
-   */
-  public void setVisibleThreshold(@Dimension(unit = Dimension.PX) int threshold) {
-    this.visibleThreshold = threshold;
+  @Override
+  public void setVisibleThreshold(@Dimension int threshold) {
+    onDemandLoader.setVisibleThreshold(threshold);
   }
 
-  /**
-   * Sets a {@link PageLoadingProvider} that provides the on demand loading capabilities.
-   *
-   * @param pageLoadingProvider The {@link PageLoadingProvider} to be set.
-   */
-  public void setPageLoadingProvider(@NonNull PageLoadingProvider pageLoadingProvider) {
-    this.pageLoadingProvider = pageLoadingProvider;
+  @Override
+  public void setLoadingProvider(@NonNull PageLoadingProvider loadingProvider) {
+    onDemandLoader.setLoadingProvider(loadingProvider);
   }
 
-  /**
-   * Resets to the initial nested scroll view values.
-   */
+  @Override
   public void resetStatus() {
-    enabled = true;
-    visibleThreshold = MetricsHelper.dpToPxInt(recyclerView.getResources(), DEFAULT_VISIBLE_THRESHOLD_DP);
-    loading = false;
-    previousRecyclerViewHeight = recyclerView.getMeasuredHeight();
-    page = 1;
+    onDemandLoader.resetStatus();
+  }
+
+  /**
+   * Resets to the initial view values.
+   *
+   * @param nestedScrollView It's used to get the child size
+   */
+  public void resetStatus(@NonNull NestedScrollView nestedScrollView) {
+    View lastView = getLastNestedScrollChildView(nestedScrollView);
+    totalItemCount = lastView == null ? 0 :lastView.getMeasuredHeight();
+    onDemandLoader.resetStatus();
   }
 
   /**
@@ -79,16 +67,21 @@ public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScro
   @Override
   public void onScrollChange(@NonNull NestedScrollView nestedScrollView, int scrollX, int scrollY,
                              int oldScrollX, int oldScrollY) {
-    if (previousRecyclerViewHeight < recyclerView.getMeasuredHeight()) {
-      loading = false;
-      page++;
-      previousRecyclerViewHeight = recyclerView.getMeasuredHeight();
+    View lastView = getLastNestedScrollChildView(nestedScrollView);
+    if (lastView != null) {
+      totalItemCount = lastView.getMeasuredHeight();
     }
 
-    if ((scrollY + visibleThreshold >= (recyclerView.getMeasuredHeight() - nestedScrollView.getMeasuredHeight())) &&
-        scrollY > oldScrollY && !loading && enabled) {
-      loading = true;
-      pageLoadingProvider.loadPage(page);
-    }
+    onDemandLoader.onItemConsumed(scrollY + nestedScrollView.getMeasuredHeight());
+  }
+
+  @Nullable
+  private View getLastNestedScrollChildView(@NonNull NestedScrollView nestedScrollView) {
+    return nestedScrollView.getChildAt(nestedScrollView.getChildCount() - 1);
+  }
+
+  @Override
+  public int getItemCount() {
+    return totalItemCount;
   }
 }

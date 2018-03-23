@@ -8,4 +8,8 @@ public interface PageLoadingProvider {
    * @param page The next page to be loaded.
    */
   void loadPage(int page);
+
+  boolean hasMorePages();
+
+  int getFirstPage();
 }

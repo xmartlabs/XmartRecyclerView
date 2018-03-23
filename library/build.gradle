@@ -1,5 +1,6 @@
 apply from: '../versions.gradle'
 apply plugin: 'com.android.library'
+apply plugin: 'project-report'
 
 android {
     compileSdkVersion project.ext.compileSdkVersion
@@ -29,6 +30,10 @@ dependencies {
     androidTestImplementation "com.annimon:stream:${libraryVersion.stream}"
     androidTestImplementation "com.android.support.test:runner:${libraryVersion.testRunner}"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${libraryVersion.espresso}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:${libraryVersion.espresso}"
+    androidTestImplementation "com.android.support:appcompat-v7:${libraryVersion.androidSupport}"
+    androidTestImplementation "com.android.support:support-v4:${libraryVersion.androidSupport}"
+    androidTestImplementation "com.android.support:design:${libraryVersion.androidSupport}"
 
     implementation "com.android.support:recyclerview-v7:${libraryVersion.androidSupport}"
 
