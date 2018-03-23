@@ -339,6 +339,10 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
     }
   }
 
+  protected Element<? extends T, ? extends VH, ?> getElement(int position) {
+    return elements.get(position);
+  }
+
   /**
    * Gets the item type.
    *
@@ -391,7 +395,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
     }
   }
 
-  private static class Element<T, VH extends RecyclerView.ViewHolder, VT extends RecycleItemType<T, VH>> {
+  protected final static class Element<T, VH extends RecyclerView.ViewHolder, VT extends RecycleItemType<T, VH>> {
     @NonNull
     private final VT type;
     @NonNull

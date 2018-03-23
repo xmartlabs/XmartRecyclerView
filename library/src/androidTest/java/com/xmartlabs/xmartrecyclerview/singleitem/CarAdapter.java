@@ -20,15 +20,15 @@ public class CarAdapter extends SingleItemTypeRecyclerViewAdapter<Car, CarAdapte
   static final class CarViewHolder extends SingleItemViewHolder<Car> {
     private final TextView title;
 
-    public CarViewHolder(@NonNull View view) {
+    CarViewHolder(@NonNull View view) {
       super(view);
       title = view.findViewById(android.R.id.title);
     }
 
     @Override
-    public void bindItem(@NonNull Car item) {
-      super.bindItem(item);
-      title.setText(item.getModel());
+    public void bindItem(@NonNull Car car) {
+      super.bindItem(car);
+      title.setText(car.getModel());
     }
   }
 }

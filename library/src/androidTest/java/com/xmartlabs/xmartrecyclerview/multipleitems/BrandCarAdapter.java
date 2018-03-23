@@ -56,10 +56,10 @@ class BrandCarAdapter extends BaseRecyclerViewAdapter<Object, RecyclerView.ViewH
     }
 
     @Override
-    public void bindItem(@NonNull Brand item) {
-      super.bindItem(item);
+    public void bindItem(@NonNull Brand t) {
+      super.bindItem(t);
 
-      title.setText(item.getName());
+      title.setText(t.getName());
     }
   }
 
@@ -72,9 +72,9 @@ class BrandCarAdapter extends BaseRecyclerViewAdapter<Object, RecyclerView.ViewH
     }
 
     @Override
-    public void bindItem(@NonNull Car item) {
-      super.bindItem(item);
-      title.setText(item.getModel());
+    public void bindItem(@NonNull Car car) {
+      super.bindItem(car);
+      title.setText(car.getModel());
     }
   }
 }

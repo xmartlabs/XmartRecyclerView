@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 public abstract class SingleItemRecyclerViewItemType<I, VH extends SingleItemViewHolder<I>>
     implements RecycleItemType<I, VH> {
   @Override
-  public void onBindViewHolder(@NonNull VH viewHolder, @NonNull I item, int position) {
+  public void onBindViewHolder(@NonNull VH viewHolder, @NonNull I i, int position) {
 
   }
 }

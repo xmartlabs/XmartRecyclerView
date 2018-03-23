@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
-    <com.xmartlabs.xmartrecyclerview.RecyclerViewEmptySupport
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <RelativeLayout
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        >
+
+        <TextView
+            android:id="@+id/empty_list_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="The list is empty."
+            />
+
+        <Button
+            android:id="@+id/populate_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/empty_list_textView"
+            android:layout_centerInParent="true"
+            android:text="Populate"
+            />
+
+    </RelativeLayout>
+
+    <com.xmartlabs.xmartrecyclerview.emptysupport.RecyclerViewEmptySupport
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:emptyView="@android:id/empty"
         />
 
 </FrameLayout>
