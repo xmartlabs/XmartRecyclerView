@@ -11,7 +11,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Locale;
 
-import static android.support.v4.util.Preconditions.checkNotNull;
+import static android.support.test.internal.util.Checks.checkNotNull;
 
 public class RecyclerViewAssertions {
   public static Matcher<View> countIs(int count) {
