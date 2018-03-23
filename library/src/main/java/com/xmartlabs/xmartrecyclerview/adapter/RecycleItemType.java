@@ -20,13 +20,14 @@ public interface RecycleItemType<I, VH extends RecyclerView.ViewHolder> {
    */
   @NonNull
   VH onCreateViewHolder(@NonNull ViewGroup parent);
+
   /**
    * Called to bind the {@link android.support.v7.widget.RecyclerView.ViewHolder} {@link VH} with the item of the
    * type {@link I}
    *
    * @param viewHolder {@link android.support.v7.widget.RecyclerView.ViewHolder} to be bound.
-   * @param item       Item to be bound.
+   * @param i          Item to be bound.
    * @param position   Position in the adapter.
    */
-  void onBindViewHolder(@NonNull VH viewHolder, @NonNull I item, int position);
+  void onBindViewHolder(@NonNull VH viewHolder, @NonNull I i, int position);
 }

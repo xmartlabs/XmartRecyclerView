@@ -1,5 +1,6 @@
 package com.xmartlabs.xmartrecyclerview.adapter;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -87,6 +88,13 @@ public abstract class SingleItemTypeRecyclerViewAdapter<T, VH extends RecyclerVi
     setItems(this, newItems, areItemsTheSameFunction, areContentTheSameFunction);
   }
 
+  @CallSuper
   @Override
-  public void onBindViewHolder(@NonNull VH viewHolder, @NonNull T item, int position) {}
+  public void onBindViewHolder(@NonNull VH viewHolder, int position) {
+    super.onBindViewHolder(viewHolder, position);
+    onBindViewHolder(viewHolder, getElement(position).getItem(), position);
+  }
+
+  @Override
+  public void onBindViewHolder(@NonNull VH viewHolder, @NonNull T t, int position) {}
 }

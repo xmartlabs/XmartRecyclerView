@@ -26,9 +26,9 @@ public class SingleItemViewHolder<T> extends BaseViewHolder implements BindingIt
 
   @CallSuper
   @Override
-  public void bindItem(@NonNull T item) {
+  public void bindItem(@NonNull T t) {
     if (onClickListener != null) {
-      itemView.setOnClickListener(v -> onClickListener.accept(item));
+      itemView.setOnClickListener(v -> onClickListener.accept(t));
     }
   }
 }
