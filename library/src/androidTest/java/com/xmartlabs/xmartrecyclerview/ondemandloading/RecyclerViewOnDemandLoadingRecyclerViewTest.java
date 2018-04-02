@@ -41,23 +41,23 @@ public class RecyclerViewOnDemandLoadingRecyclerViewTest extends BaseOnDemandLoa
     activity.getRecyclerView().addOnScrollListener(scrollListener);
 
     sleep(100);
-    assertThat(Collections.singletonList(1), is(pagesRequested));
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
 
     scrollToPosition(activity.getAdapter().getItemCount() - visibleThreshold - 1);
     sleep(100);
-    assertThat(Collections.singletonList(1), is(pagesRequested));
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
 
     scrollToPosition(activity.getAdapter().getItemCount() - visibleThreshold);
     sleep(100);
-    assertThat(Arrays.asList(1, 2), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2)));
 
     scrollToPosition(activity.getAdapter().getItemCount() - visibleThreshold);
     sleep(100);
-    assertThat(Arrays.asList(1, 2, 3), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2, 3)));
 
     scrollToPosition(activity.getAdapter().getItemCount() - 1);
     sleep(100);
-    assertThat(Arrays.asList(1, 2, 3), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2, 3)));
   }
 
   @Override
@@ -75,7 +75,7 @@ public class RecyclerViewOnDemandLoadingRecyclerViewTest extends BaseOnDemandLoa
     BasePageLoadingProvider provider = createLoaderProvider(pagesRequested, activity);
     activity.getAdapter().setLoader(provider);
     sleep(100);
-    assertThat(Collections.singletonList(1), is(pagesRequested));
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
 
     OnDemandLoader loader = activity.getAdapter().getOnDemandLoader();
     //noinspection ConstantConditions
@@ -83,18 +83,18 @@ public class RecyclerViewOnDemandLoadingRecyclerViewTest extends BaseOnDemandLoa
 
     scrollToPosition(activity.getAdapter().getItemCount() - visibleThreshold - 1);
     sleep(100);
-    assertThat(Collections.singletonList(1), is(pagesRequested));
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
 
     scrollToPosition(activity.getAdapter().getItemCount() - visibleThreshold);
     sleep(100);
-    assertThat(Arrays.asList(1, 2), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2)));
 
     scrollToPosition(activity.getAdapter().getItemCount() - visibleThreshold);
     sleep(100);
-    assertThat(Arrays.asList(1, 2, 3), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2, 3)));
 
     scrollToPosition(activity.getAdapter().getItemCount() - 1);
     sleep(100);
-    assertThat(Arrays.asList(1, 2, 3), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2, 3)));
   }
 }

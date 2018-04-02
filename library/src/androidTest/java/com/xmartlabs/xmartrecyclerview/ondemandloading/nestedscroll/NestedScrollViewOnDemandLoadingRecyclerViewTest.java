@@ -49,26 +49,26 @@ public class NestedScrollViewOnDemandLoadingRecyclerViewTest extends BaseOnDeman
     activity.getNestedScrollView().setOnScrollChangeListener(scrollListener);
 
     sleep(100);
-    assertThat(Collections.singletonList(1), is(pagesRequested));
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
 
     scrollToPosition(PAGE_SIZE - visibleThresholdCount - 2);
 
     sleep(100);
-    assertThat(Collections.singletonList(1), is(pagesRequested));
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
 
     scrollToPosition(PAGE_SIZE - visibleThresholdCount);
 
     sleep(100);
-    assertThat(Arrays.asList(1, 2), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2)));
 
     scrollToPosition(PAGE_SIZE * 2 - visibleThresholdCount);
 
     sleep(100);
-    assertThat(Arrays.asList(1, 2, 3), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2, 3)));
 
     scrollToTheBottom(activity);
     sleep(100);
-    assertThat(Arrays.asList(1, 2, 3), is(pagesRequested));
+    assertThat(pagesRequested, is(Arrays.asList(1, 2, 3)));
   }
 
   @Override
