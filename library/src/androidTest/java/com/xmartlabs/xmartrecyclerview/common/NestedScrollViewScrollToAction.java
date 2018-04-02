@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.anyOf;
  * Enables scrolling to the given view. View must be a descendant of a ScrollView.
  */
 public final class NestedScrollViewScrollToAction implements ViewAction {
-
   private static final String TAG = NestedScrollViewScrollToAction.class.getSimpleName();
 
   public static NestedScrollViewScrollToAction scrollTo() {

@@ -51,7 +51,7 @@ public class NestedScrollViewOnDemandLoadingRecyclerViewTest extends BaseOnDeman
     sleep(100);
     assertThat(Collections.singletonList(1), is(pagesRequested));
 
-    scrollToPosition(PAGE_SIZE - visibleThresholdCount - 1);
+    scrollToPosition(PAGE_SIZE - visibleThresholdCount - 2);
 
     sleep(100);
     assertThat(Collections.singletonList(1), is(pagesRequested));

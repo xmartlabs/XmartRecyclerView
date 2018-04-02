@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.xmartlabs.xmartrecyclerview.test.R;
 
 public abstract class ListActivity<T extends RecyclerView.Adapter> extends Activity {
-  protected RecyclerView recyclerView;
+  private RecyclerView recyclerView;
 
   @NonNull
   private final T adapter = createAdapter();

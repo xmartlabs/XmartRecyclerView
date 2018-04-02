@@ -46,7 +46,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
   }
 
   public void setLoader(@NonNull PageLoadingProvider loadingProvider) {
-    onDemandLoader = new BaseOnDemandLoader(loadingProvider, elements::size);
+    onDemandLoader = new BaseOnDemandLoader(loadingProvider, this);
   }
 
   @Nullable
