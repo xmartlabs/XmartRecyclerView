@@ -72,7 +72,8 @@ public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScro
       totalItemCount = lastView.getMeasuredHeight();
     }
 
-    onDemandLoader.onItemConsumed(scrollY + nestedScrollView.getMeasuredHeight());
+    // -1 is because some devices scroll 1 pixel more
+    onDemandLoader.onItemConsumed(scrollY + nestedScrollView.getMeasuredHeight() - 1);
   }
 
   @Nullable
