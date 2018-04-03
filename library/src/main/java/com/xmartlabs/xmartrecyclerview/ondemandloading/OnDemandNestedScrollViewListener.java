@@ -47,8 +47,9 @@ public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScro
   /**
    * Resets to the initial view values.
    *
-   * @param nestedScrollView It's used to get the child size
+   * @param nestedScrollView It's used to get the original view size..
    */
+  @SuppressWarnings("unused")
   public void resetStatus(@NonNull NestedScrollView nestedScrollView) {
     View lastView = getLastNestedScrollChildView(nestedScrollView);
     totalItemCount = lastView == null ? 0 : lastView.getMeasuredHeight();

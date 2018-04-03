@@ -3,9 +3,9 @@ package com.xmartlabs.xmartrecyclerview.ondemandloading;
 import android.support.annotation.NonNull;
 
 /**
- *  Provides the necessary operations to setup the on demand loading while scrolling a
- * {@link android.support.v7.widget.RecyclerView}
- * */
+ * Provides the necessary operations to setup the on demand loading while scrolling a
+ * {@link android.support.v7.widget.RecyclerView} or a {@link android.support.v4.widget.NestedScrollView}
+ */
 public interface OnDemandLoader {
   /**
    * Enables or disables the loading on demand when scrolling.
@@ -15,9 +15,9 @@ public interface OnDemandLoader {
   void setEnabled(boolean isEnabled);
 
   /**
-   * Sets the visible threshold, in items, for the on demand loading to happen.
+   * Sets the value of the visible threshold for the on demand loading.
    *
-   * @param threshold Visible threshold, in items, for the on demand loading to happen.
+   * @param threshold A value that specifies the visible threshold for the on demand loading to happen.
    */
   void setVisibleThreshold(int threshold);
 

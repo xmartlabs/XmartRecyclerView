@@ -11,16 +11,16 @@ public interface PageLoadingProvider {
 
   /**
    * Called to know if there are more pages to request.
-   * The result will be used before call loadPage method
+   * The result will be used before call {@link #loadPage(int)} method.
    *
    * @return If there are more pages to use.
    */
   boolean hasMorePages();
 
   /**
-   * Called in the initialization to setup the first page.
+   * Called in the initialization to setup the first page to be requested.
    *
-   * @return the number of the first page.
+   * @return the number of the first page to be requested.
    */
   int getFirstPage();
 }

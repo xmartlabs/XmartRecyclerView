@@ -53,6 +53,12 @@ public final class BaseOnDemandLoader implements OnDemandLoader {
     checkIfLoadingIsNeeded();
   }
 
+  /**
+   * Called when an item is consumed.
+   * This method could invoke a new page request.
+   *
+   * @param index The index of the consumed element.
+   * */
   public void onItemConsumed(int index) {
     totalItemCount = itemContainer.getItemCount();
     lastItemConsumed = index;

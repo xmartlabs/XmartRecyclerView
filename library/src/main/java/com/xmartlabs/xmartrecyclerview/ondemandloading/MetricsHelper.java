@@ -15,7 +15,7 @@ public final class MetricsHelper {
    * @return the converted {@code dp} value to pixels
    */
   @Dimension
-  static float dpToPx(@NonNull Resources resources, @Dimension(unit = Dimension.DP) float dp) {
+  private static float dpToPx(@NonNull Resources resources, @Dimension(unit = Dimension.DP) float dp) {
     return dp * resources.getDisplayMetrics().density;
   }
 
