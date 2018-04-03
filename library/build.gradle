@@ -1,5 +1,8 @@
 apply from: '../versions.gradle'
 apply plugin: 'com.android.library'
+apply plugin: 'android-maven'
+
+group='com.xmartlabs.xmartlabs'
 
 android {
     compileSdkVersion project.ext.compileSdkVersion
@@ -33,4 +36,26 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:${libraryVersion.androidSupport}"
 
     testImplementation "junit:junit:${libraryVersion.junit}"
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    failOnError  false
+    source = android.sourceSets.main.java.srcDirs
+    configurations.implementation.setCanBeResolved(true)
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator)) + configurations.implementation
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }
