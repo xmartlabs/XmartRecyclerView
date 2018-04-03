@@ -51,7 +51,7 @@ public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScro
    */
   public void resetStatus(@NonNull NestedScrollView nestedScrollView) {
     View lastView = getLastNestedScrollChildView(nestedScrollView);
-    totalItemCount = lastView == null ? 0 :lastView.getMeasuredHeight();
+    totalItemCount = lastView == null ? 0 : lastView.getMeasuredHeight();
     onDemandLoader.resetStatus();
   }
 
