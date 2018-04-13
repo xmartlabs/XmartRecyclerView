@@ -20,8 +20,8 @@ android {
 }
 
 dependencies {
-    androidTestImplementation "com.android.support.test:runner:${libraryVersion.testRunner}"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${libraryVersion.espresso}"
+    androidTestImplementation "com.android.support.test:runner:${libraryVersion.testRunner}"
 
     implementation "com.android.support:appcompat-v7:${libraryVersion.androidSupport}"
 
