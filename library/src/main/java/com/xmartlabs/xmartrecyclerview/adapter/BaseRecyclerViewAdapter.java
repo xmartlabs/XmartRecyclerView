@@ -12,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xmartlabs.xmartrecyclerview.ondemandloading.BaseOnDemandLoader;
-import com.xmartlabs.xmartrecyclerview.ondemandloading.ItemContainer;
-import com.xmartlabs.xmartrecyclerview.ondemandloading.OnDemandLoader;
-import com.xmartlabs.xmartrecyclerview.ondemandloading.PageLoadingProvider;
+import com.xmartlabs.xmartrecyclerview.internal.paging.BaseOnDemandPageLoader;
+import com.xmartlabs.xmartrecyclerview.internal.ItemCounter;
+import com.xmartlabs.xmartrecyclerview.paging.OnDemandPageLoader;
+import com.xmartlabs.xmartrecyclerview.paging.PageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,14 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>
-    implements ItemContainer {
+    implements ItemCounter {
   @NonNull
   private final List<Element<? extends T, ? extends VH, ?>> elements = new ArrayList<>();
   @NonNull
   private final List<RecycleItemType<? extends T, ? extends VH>> types = new ArrayList<>();
   private final UpdateItemsQueuedManager updateItemsQueuedManager = new UpdateItemsQueuedManager();
   @Nullable
-  private BaseOnDemandLoader onDemandLoader;
+  private BaseOnDemandPageLoader onDemandLoader;
 
   public BaseRecyclerViewAdapter() {}
 
@@ -45,12 +45,12 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
     return types.get(viewType).onCreateViewHolder(parent);
   }
 
-  public void setLoader(@NonNull PageLoadingProvider loadingProvider) {
-    onDemandLoader = new BaseOnDemandLoader(loadingProvider, this);
+  public void setPageLoader(@NonNull PageLoader pageLoader) {
+    onDemandLoader = new BaseOnDemandPageLoader(pageLoader, this);
   }
 
   @Nullable
-  public OnDemandLoader getOnDemandLoader() {
+  public OnDemandPageLoader getOnDemandLoader() {
     return onDemandLoader;
   }
 

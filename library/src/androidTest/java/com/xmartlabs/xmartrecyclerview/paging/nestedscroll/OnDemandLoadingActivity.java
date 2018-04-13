@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading.nestedscroll;
+package com.xmartlabs.xmartrecyclerview.paging.nestedscroll;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;

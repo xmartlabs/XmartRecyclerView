@@ -1,19 +1,22 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading;
+package com.xmartlabs.xmartrecyclerview.paging;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-/** An OnDemandRecyclerViewScrollListener for {@link RecyclerView} pagination */
-public class OnDemandRecyclerViewScrollListener
-    extends RecyclerView.OnScrollListener implements ItemContainer,
-    OnDemandLoader {
+import com.xmartlabs.xmartrecyclerview.internal.ItemCounter;
+import com.xmartlabs.xmartrecyclerview.internal.paging.BaseOnDemandPageLoader;
+
+/** An OnDemandPageRecyclerViewScrollListener for {@link RecyclerView} pagination */
+public class OnDemandPageRecyclerViewScrollListener
+    extends RecyclerView.OnScrollListener implements ItemCounter,
+    OnDemandPageLoader {
   @NonNull
-  private final BaseOnDemandLoader onDemandLoader;
+  private final BaseOnDemandPageLoader onDemandLoader;
   private int totalItemCount = 0;
 
-  public OnDemandRecyclerViewScrollListener(@NonNull PageLoadingProvider loadingProvider) {
-    onDemandLoader = new BaseOnDemandLoader(loadingProvider, this);
+  public OnDemandPageRecyclerViewScrollListener(@NonNull PageLoader loadingProvider) {
+    onDemandLoader = new BaseOnDemandPageLoader(loadingProvider, this);
   }
 
   @Override
@@ -27,8 +30,8 @@ public class OnDemandRecyclerViewScrollListener
   }
 
   @Override
-  public void setLoadingProvider(@NonNull PageLoadingProvider loadingProvider) {
-    onDemandLoader.setLoadingProvider(loadingProvider);
+  public void setPageLoader(@NonNull PageLoader pageLoader) {
+    onDemandLoader.setPageLoader(pageLoader);
   }
 
   @Override

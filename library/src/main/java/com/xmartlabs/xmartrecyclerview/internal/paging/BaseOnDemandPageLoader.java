@@ -1,9 +1,14 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading;
+package com.xmartlabs.xmartrecyclerview.internal.paging;
 
 import android.support.annotation.NonNull;
+
+import com.xmartlabs.xmartrecyclerview.internal.ItemCounter;
+import com.xmartlabs.xmartrecyclerview.paging.OnDemandPageLoader;
+import com.xmartlabs.xmartrecyclerview.paging.PageLoader;
+
 /** Provides the necessary operations to allow on demand loading while scrolling a {@link android.support.v7.widget.RecyclerView} */
 @SuppressWarnings("unused")
-public final class BaseOnDemandLoader implements OnDemandLoader {
+public final class BaseOnDemandPageLoader implements OnDemandPageLoader {
   private static final int VISIBLE_THRESHOLD_DEFAULT = 5;
 
   private boolean enabled = true;
@@ -16,14 +21,14 @@ public final class BaseOnDemandLoader implements OnDemandLoader {
   private int visibleThreshold = VISIBLE_THRESHOLD_DEFAULT;
 
   @NonNull
-  private PageLoadingProvider loadingProvider;
+  private PageLoader loadingProvider;
   @NonNull
-  private final ItemContainer itemContainer;
+  private final ItemCounter itemCounter;
 
-  public BaseOnDemandLoader(@NonNull PageLoadingProvider loadingProvider, @NonNull ItemContainer itemContainer) {
-    this.itemContainer = itemContainer;
+  public BaseOnDemandPageLoader(@NonNull PageLoader loadingProvider, @NonNull ItemCounter itemCounter) {
+    this.itemCounter = itemCounter;
     this.loadingProvider = loadingProvider;
-    page = loadingProvider.getFirstPage();
+    page = loadingProvider.getFirstPageIndex();
     loadingProvider.loadPage(page);
   }
 
@@ -38,8 +43,8 @@ public final class BaseOnDemandLoader implements OnDemandLoader {
   }
 
   @Override
-  public void setLoadingProvider(@NonNull PageLoadingProvider loadingProvider) {
-    this.loadingProvider = loadingProvider;
+  public void setPageLoader(@NonNull PageLoader pageLoader) {
+    this.loadingProvider = pageLoader;
   }
 
   @Override
@@ -48,8 +53,8 @@ public final class BaseOnDemandLoader implements OnDemandLoader {
     previousTotal = 0;
     loading = false;
     lastItemConsumed = 0;
-    totalItemCount = itemContainer.getItemCount();
-    page = loadingProvider.getFirstPage();
+    totalItemCount = itemCounter.getItemCount();
+    page = loadingProvider.getFirstPageIndex();
     checkIfLoadingIsNeeded();
   }
 
@@ -60,7 +65,7 @@ public final class BaseOnDemandLoader implements OnDemandLoader {
    * @param index The index of the consumed element.
    * */
   public void onItemConsumed(int index) {
-    totalItemCount = itemContainer.getItemCount();
+    totalItemCount = itemCounter.getItemCount();
     lastItemConsumed = index;
     checkIfLoadingIsNeeded();
   }

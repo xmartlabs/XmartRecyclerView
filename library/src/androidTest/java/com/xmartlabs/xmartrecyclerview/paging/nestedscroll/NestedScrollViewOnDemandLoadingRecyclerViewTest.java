@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading.nestedscroll;
+package com.xmartlabs.xmartrecyclerview.paging.nestedscroll;
 
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
@@ -6,10 +6,10 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.xmartlabs.xmartrecyclerview.common.NestedScrollViewScrollToAction;
-import com.xmartlabs.xmartrecyclerview.ondemandloading.BaseOnDemandLoadingRecyclerViewTest;
-import com.xmartlabs.xmartrecyclerview.ondemandloading.BasePageLoadingProvider;
-import com.xmartlabs.xmartrecyclerview.ondemandloading.MetricsHelper;
-import com.xmartlabs.xmartrecyclerview.ondemandloading.OnDemandNestedScrollViewListener;
+import com.xmartlabs.xmartrecyclerview.paging.BaseOnDemandLoadingRecyclerViewTest;
+import com.xmartlabs.xmartrecyclerview.paging.BasePageLoader;
+import com.xmartlabs.xmartrecyclerview.paging.MetricsHelper;
+import com.xmartlabs.xmartrecyclerview.paging.OnDemandPageNestedScrollViewListener;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,8 +42,8 @@ public class NestedScrollViewOnDemandLoadingRecyclerViewTest extends BaseOnDeman
     int visibleThreshold = MetricsHelper.dpToPxInt(activity.getResources(), 100);
     int visibleThresholdCount = 5; // TextView view size is 20dp -> 100 / 20 = 5
 
-    BasePageLoadingProvider provider = createLoaderProvider(pagesRequested, activity);
-    OnDemandNestedScrollViewListener scrollListener = new OnDemandNestedScrollViewListener(activity, provider);
+    BasePageLoader provider = createLoaderProvider(pagesRequested, activity);
+    OnDemandPageNestedScrollViewListener scrollListener = new OnDemandPageNestedScrollViewListener(activity, provider);
     scrollListener.setVisibleThreshold(visibleThreshold);
 
     activity.getNestedScrollView().setOnScrollChangeListener(scrollListener);

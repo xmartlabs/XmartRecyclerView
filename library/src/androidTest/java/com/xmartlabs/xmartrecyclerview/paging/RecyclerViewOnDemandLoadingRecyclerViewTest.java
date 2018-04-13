@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading;
+package com.xmartlabs.xmartrecyclerview.paging;
 
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -34,8 +34,8 @@ public class RecyclerViewOnDemandLoadingRecyclerViewTest extends BaseOnDemandLoa
     SingleItemActivity activity = getActivity();
     int visibleThreshold = 10;
 
-    BasePageLoadingProvider provider = createLoaderProvider(pagesRequested, activity);
-    OnDemandRecyclerViewScrollListener scrollListener = new OnDemandRecyclerViewScrollListener(provider);
+    BasePageLoader provider = createLoaderProvider(pagesRequested, activity);
+    OnDemandPageRecyclerViewScrollListener scrollListener = new OnDemandPageRecyclerViewScrollListener(provider);
     scrollListener.setVisibleThreshold(visibleThreshold);
 
     activity.getRecyclerView().addOnScrollListener(scrollListener);
@@ -72,12 +72,12 @@ public class RecyclerViewOnDemandLoadingRecyclerViewTest extends BaseOnDemandLoa
     SingleItemActivity activity = getActivity();
     int visibleThreshold = 10;
 
-    BasePageLoadingProvider provider = createLoaderProvider(pagesRequested, activity);
-    activity.getAdapter().setLoader(provider);
+    BasePageLoader provider = createLoaderProvider(pagesRequested, activity);
+    activity.getAdapter().setPageLoader(provider);
     sleep(100);
     assertThat(pagesRequested, is(Collections.singletonList(1)));
 
-    OnDemandLoader loader = activity.getAdapter().getOnDemandLoader();
+    OnDemandPageLoader loader = activity.getAdapter().getOnDemandLoader();
     //noinspection ConstantConditions
     loader.setVisibleThreshold(visibleThreshold);
 

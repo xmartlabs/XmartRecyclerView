@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading;
+package com.xmartlabs.xmartrecyclerview.paging;
 
 import android.content.res.Resources;
 import android.support.annotation.Dimension;

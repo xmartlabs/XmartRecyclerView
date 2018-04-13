@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading;
+package com.xmartlabs.xmartrecyclerview.paging;
 
 import android.support.annotation.NonNull;
 
@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
  * Provides the necessary operations to setup the on demand loading while scrolling a
  * {@link android.support.v7.widget.RecyclerView} or a {@link android.support.v4.widget.NestedScrollView}
  */
-public interface OnDemandLoader {
+public interface OnDemandPageLoader {
   /**
    * Enables or disables the loading on demand when scrolling.
    *
@@ -22,11 +22,11 @@ public interface OnDemandLoader {
   void setVisibleThreshold(int threshold);
 
   /**
-   * Sets a {@link PageLoadingProvider} that provides the on demand loading capabilities.
+   * Sets a {@link PageLoader} that provides the on demand loading capabilities.
    *
-   * @param loadingProvider The {@link PageLoadingProvider} to be set.
+   * @param pageLoader The {@link PageLoader} to be set.
    */
-  void setLoadingProvider(@NonNull PageLoadingProvider loadingProvider);
+  void setPageLoader(@NonNull PageLoader pageLoader);
 
   /** Resets to the initial nested scroll view values. */
   void resetStatus();

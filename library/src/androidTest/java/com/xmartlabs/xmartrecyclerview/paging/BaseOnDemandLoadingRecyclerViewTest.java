@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading;
+package com.xmartlabs.xmartrecyclerview.paging;
 
 import android.support.annotation.NonNull;
 
@@ -29,8 +29,8 @@ public abstract class BaseOnDemandLoadingRecyclerViewTest<T extends ListActivity
   protected abstract void scrollToPosition(int position);
 
   @NonNull
-  protected BasePageLoadingProvider createLoaderProvider(@NonNull List<Integer> pagesRequested, @NonNull T activity) {
-    BasePageLoadingProvider provider = new BasePageLoadingProvider(() -> activity.getAdapter().getItemCount()) {
+  protected BasePageLoader createLoaderProvider(@NonNull List<Integer> pagesRequested, @NonNull T activity) {
+    BasePageLoader provider = new BasePageLoader(() -> activity.getAdapter().getItemCount()) {
       @Override
       public void loadPage(int page) {
         activity.getWindow().getDecorView().getHandler()
@@ -40,7 +40,7 @@ public abstract class BaseOnDemandLoadingRecyclerViewTest<T extends ListActivity
             });
       }
     };
-    provider.setTotalEntities((int) (2.5 * PAGE_SIZE));
+    provider.setEntityCount((int) (2.5 * PAGE_SIZE));
     return provider;
   }
 

@@ -1,4 +1,4 @@
-package com.xmartlabs.xmartrecyclerview.ondemandloading;
+package com.xmartlabs.xmartrecyclerview.paging;
 
 import android.content.Context;
 import android.support.annotation.Dimension;
@@ -8,19 +8,22 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-/** An OnDemandRecyclerViewScrollListener for {@link RecyclerView} pagination in {@link NestedScrollView}'s */
-public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScrollChangeListener, ItemContainer,
-    OnDemandLoader {
+import com.xmartlabs.xmartrecyclerview.internal.ItemCounter;
+import com.xmartlabs.xmartrecyclerview.internal.paging.BaseOnDemandPageLoader;
+
+/** An OnDemandPageRecyclerViewScrollListener for {@link RecyclerView} pagination in {@link NestedScrollView}'s */
+public class OnDemandPageNestedScrollViewListener implements NestedScrollView.OnScrollChangeListener, ItemCounter,
+    OnDemandPageLoader {
   @Dimension(unit = Dimension.DP)
   private static final int DEFAULT_VISIBLE_THRESHOLD_DP = 100;
 
   private int totalItemCount = 0;
 
   @NonNull
-  private final BaseOnDemandLoader onDemandLoader;
+  private final BaseOnDemandPageLoader onDemandLoader;
 
-  public OnDemandNestedScrollViewListener(@NonNull Context context, @NonNull PageLoadingProvider loadingProvider) {
-    onDemandLoader = new BaseOnDemandLoader(loadingProvider, this);
+  public OnDemandPageNestedScrollViewListener(@NonNull Context context, @NonNull PageLoader loadingProvider) {
+    onDemandLoader = new BaseOnDemandPageLoader(loadingProvider, this);
     onDemandLoader.setVisibleThreshold(MetricsHelper.dpToPxInt(context.getResources(), DEFAULT_VISIBLE_THRESHOLD_DP));
   }
 
@@ -35,8 +38,8 @@ public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScro
   }
 
   @Override
-  public void setLoadingProvider(@NonNull PageLoadingProvider loadingProvider) {
-    onDemandLoader.setLoadingProvider(loadingProvider);
+  public void setPageLoader(@NonNull PageLoader pageLoader) {
+    onDemandLoader.setPageLoader(pageLoader);
   }
 
   @Override
@@ -73,7 +76,7 @@ public class OnDemandNestedScrollViewListener implements NestedScrollView.OnScro
       totalItemCount = lastView.getMeasuredHeight();
     }
 
-    // -1 is because some devices scroll 1 pixel more
+    // -1 is because some devices scroll 1 more pixel.
     onDemandLoader.onItemConsumed(scrollY + nestedScrollView.getMeasuredHeight() - 1);
   }
 
