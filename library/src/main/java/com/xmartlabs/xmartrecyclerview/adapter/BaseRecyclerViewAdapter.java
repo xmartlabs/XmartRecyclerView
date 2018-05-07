@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xmartlabs.xmartrecyclerview.common.Function;
+import com.xmartlabs.xmartrecyclerview.internal.paging.BaseOnDemandPageLoader;
+import com.xmartlabs.xmartrecyclerview.internal.ItemCounter;
+import com.xmartlabs.xmartrecyclerview.paging.OnDemandPageLoader;
+import com.xmartlabs.xmartrecyclerview.paging.PageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +27,31 @@ import java.util.List;
  * @param <T>  Items class.
  * @param <VH> A class that extends ViewHolder that will be used by the adapter.
  */
-public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+@SuppressWarnings("unused")
+public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH>
+    implements ItemCounter {
   @NonNull
   private final List<Element<? extends T, ? extends VH, ?>> elements = new ArrayList<>();
   @NonNull
   private final List<RecycleItemType<? extends T, ? extends VH>> types = new ArrayList<>();
   private final UpdateItemsQueuedManager updateItemsQueuedManager = new UpdateItemsQueuedManager();
+  @Nullable
+  private BaseOnDemandPageLoader onDemandLoader;
 
   public BaseRecyclerViewAdapter() {}
 
   @Override
   public final VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     return types.get(viewType).onCreateViewHolder(parent);
+  }
+
+  public void setPageLoader(@NonNull PageLoader pageLoader) {
+    onDemandLoader = new BaseOnDemandPageLoader(pageLoader, this);
+  }
+
+  @Nullable
+  public OnDemandPageLoader getOnDemandLoader() {
+    return onDemandLoader;
   }
 
   /**
@@ -329,6 +345,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
   @CallSuper
   @Override
   public void onBindViewHolder(@NonNull VH viewHolder, int position) {
+    if (onDemandLoader != null) {
+      onDemandLoader.onItemConsumed(position);
+    }
     Element element = elements.get(position);
     Object item = element.getItem();
     //noinspection unchecked

@@ -18,6 +18,12 @@
             android:screenOrientation="portrait"
             />
 
+        <activity
+            android:configChanges="orientation|screenSize"
+            android:name=".paging.nestedscroll.OnDemandLoadingActivity"
+            android:screenOrientation="portrait"
+            />
+
     </application>
 
 </manifest>

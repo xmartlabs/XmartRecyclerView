@@ -2,6 +2,7 @@ package com.xmartlabs.xmartrecyclerview.common;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,9 +23,19 @@ public abstract class ListActivity<T extends RecyclerView.Adapter> extends Activ
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_with_list);
+    setContentView(getLayoutRes());
     recyclerView = findViewById(R.id.recycler_view);
     setupRecyclerViewAdapter();
+  }
+
+  @LayoutRes
+  protected int getLayoutRes() {
+    return R.layout.activity_with_list;
+  }
+
+  @NonNull
+  public RecyclerView getRecyclerView() {
+    return recyclerView;
   }
 
   private void setupRecyclerViewAdapter() {
