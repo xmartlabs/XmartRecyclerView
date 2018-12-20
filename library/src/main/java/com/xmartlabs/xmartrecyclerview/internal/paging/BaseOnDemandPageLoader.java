@@ -63,7 +63,7 @@ public final class BaseOnDemandPageLoader implements OnDemandPageLoader {
    * This method could invoke a new page request.
    *
    * @param index The index of the consumed element.
-   */
+   **/
   public void onItemConsumed(int index) {
     totalItemCount = itemCounter.getItemCount();
     lastItemConsumed = index;
