@@ -30,6 +30,11 @@ public abstract class BaseOnDemandLoadingRecyclerViewTest<T extends ListActivity
 
   @NonNull
   protected BasePageLoader createLoaderProvider(@NonNull List<Integer> pagesRequested, @NonNull T activity) {
+    return createLoaderProvider(pagesRequested, activity, (int) (2.5 * PAGE_SIZE));
+  }
+
+  @NonNull
+  protected BasePageLoader createLoaderProvider(@NonNull List<Integer> pagesRequested, @NonNull T activity, int entityCount) {
     BasePageLoader provider = new BasePageLoader(() -> activity.getAdapter().getItemCount()) {
       @Override
       public void loadPage(int page) {
@@ -40,7 +45,7 @@ public abstract class BaseOnDemandLoadingRecyclerViewTest<T extends ListActivity
             });
       }
     };
-    provider.setEntityCount((int) (2.5 * PAGE_SIZE));
+    provider.setEntityCount(entityCount);
     return provider;
   }
 
