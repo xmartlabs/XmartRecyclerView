@@ -5,7 +5,7 @@ jobs:
     docker:
       # Android the primary container
       # Related issue: https://discuss.circleci.com/t/working-android-emulator-based-tests-not-working-anymore/26543/2
-      - image: circleci/api-26-node8-alpha
+      - image: circleci/android-api-26-node8-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
