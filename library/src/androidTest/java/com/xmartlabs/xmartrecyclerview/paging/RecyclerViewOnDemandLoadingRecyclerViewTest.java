@@ -97,4 +97,46 @@ public class RecyclerViewOnDemandLoadingRecyclerViewTest extends BaseOnDemandLoa
     sleep(100);
     assertThat(pagesRequested, is(Arrays.asList(1, 2, 3)));
   }
+
+  @Test
+  public void checkRecyclerViewResetState() {
+    List<Integer> pagesRequested = new ArrayList<>();
+    SingleItemActivity activity = getActivity();
+    int visibleThreshold = 10;
+
+    BasePageLoader provider = createLoaderProvider(pagesRequested, activity);
+    OnDemandPageRecyclerViewScrollListener scrollListener = new OnDemandPageRecyclerViewScrollListener(provider);
+    scrollListener.setVisibleThreshold(visibleThreshold);
+
+    activity.getRecyclerView().addOnScrollListener(scrollListener);
+
+    sleep(100);
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
+
+    scrollListener.resetStatus();
+
+    sleep(100);
+    assertThat(pagesRequested, is(Arrays.asList(1, 1)));
+  }
+
+  @Test
+  public void checkRecyclerViewResetStateWithUniquePage() {
+    List<Integer> pagesRequested = new ArrayList<>();
+    SingleItemActivity activity = getActivity();
+    int visibleThreshold = 10;
+
+    BasePageLoader provider = createLoaderProvider(pagesRequested, activity, 1);
+    OnDemandPageRecyclerViewScrollListener scrollListener = new OnDemandPageRecyclerViewScrollListener(provider);
+    scrollListener.setVisibleThreshold(visibleThreshold);
+
+    activity.getRecyclerView().addOnScrollListener(scrollListener);
+
+    sleep(100);
+    assertThat(pagesRequested, is(Collections.singletonList(1)));
+
+    scrollListener.resetStatus();
+
+    sleep(100);
+    assertThat(pagesRequested, is(Arrays.asList(1, 1)));
+  }
 }
